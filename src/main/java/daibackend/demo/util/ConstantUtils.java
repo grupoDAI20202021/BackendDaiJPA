@@ -1,4 +1,4 @@
-package backenddai.demo.util;
+package daibackend.demo.util;
 
 public class ConstantUtils {
     // Allow only letters and numbers
