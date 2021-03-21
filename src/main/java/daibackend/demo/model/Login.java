@@ -4,22 +4,20 @@ package daibackend.demo.model;
 
 import daibackend.demo.util.ConstantUtils;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Entity(name = "login")
 @Table(name = "login")
+
 public class Login {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_login;
 
+    @Column(unique = true)
     @Email(message = "Insert a valid email")
     private String email;
 
@@ -27,12 +25,9 @@ public class Login {
     @Pattern(regexp = daibackend.demo.util.ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number")
     private String password;
 
-
-
     @NotBlank(message = "Can't be blank")
     @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Allow only letters, letters with special characters and spaces")
     private String profile;
-
 
     public Login() {
     }

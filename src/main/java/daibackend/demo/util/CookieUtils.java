@@ -1,4 +1,4 @@
-package backenddai.demo.util;
+package daibackend.demo.util;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
