@@ -1,5 +1,7 @@
 package daibackend.demo.repository;
 
+import daibackend.demo.model.Activity;
+import daibackend.demo.model.Child;
 import daibackend.demo.model.Inscription;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -9,7 +11,7 @@ import javax.transaction.Transactional;
 
 public interface InscriptionRepository extends JpaRepository<Inscription, Long> {
 
-    Inscription findDistinctByActivityAndChild();
+    Inscription findDistinctByActivityAndChild(Activity activity, Child child);
 
     @Transactional
     @Modifying
