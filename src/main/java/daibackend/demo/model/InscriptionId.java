@@ -6,33 +6,33 @@ import java.util.Objects;
 
 public class InscriptionId implements Serializable {
 
-    private Child id_child;
+    private Child child;
 
-    private Activity id_activity;
+    private Activity activity;
 
     public InscriptionId() {
 
     }
-    public InscriptionId(Child id_child, Activity id_activity) {
-        this.id_child = id_child;
-        this.id_activity = id_activity;
+    public InscriptionId(Child child, Activity activity) {
+        this.child = child;
+        this.activity = activity;
     }
 
 
-    public Child getId_child() {
-        return id_child;
+    public Child getChild() {
+        return child;
     }
 
-    public void setId_child(Child id_child) {
-        this.id_child = id_child;
+    public void setChild(Child id_child) {
+        this.child = id_child;
     }
 
-    public Activity getId_activity() {
-        return id_activity;
+    public Activity getActivity() {
+        return activity;
     }
 
-    public void setId_activity(Activity id_activity) {
-        this.id_activity = id_activity;
+    public void setActivity(Activity id_activity) {
+        this.activity = id_activity;
     }
 
 
@@ -43,11 +43,11 @@ public class InscriptionId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         InscriptionId that = (InscriptionId) o;
-        return Objects.equals(id_child, that.id_child) && Objects.equals(id_activity, that.id_activity);
+        return Objects.equals(child, that.child) && Objects.equals(activity, that.activity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_child, id_activity);
+        return Objects.hash(child, activity);
     }
 }

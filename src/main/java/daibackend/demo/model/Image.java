@@ -4,17 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
-@Entity(name = "Image")
-@Table(name = "Image")
+@Entity(name = "image")
+@Table(name = "image")
 
-public class ImageExample {
+public class Image {
 
 
     @Id
-    @Column(name = "id_image")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private Long id_image;
+    private Long idImage;
 
     @Column(name = "name")
     private String name;
@@ -27,12 +26,12 @@ public class ImageExample {
     private byte[] picByte;
 
 
-    public ImageExample() {
+    public Image() {
         super();
     }
 
-    public ImageExample(Long id_image, String name, String type, byte[] picByte) {
-        this.id_image = id_image;
+    public Image(Long idImage, String name, String type, byte[] picByte) {
+        this.idImage = idImage;
         this.name = name;
         this.type = type;
         this.picByte = picByte;
@@ -63,11 +62,11 @@ public class ImageExample {
     }
 
     public Long getId() {
-        return id_image;
+        return idImage;
     }
 
     public void setId(Long id_image) {
-        this.id_image = id_image;
+        this.idImage = id_image;
     }
 
 

@@ -6,15 +6,15 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Entity(name = "Town_Hall")
-@Table(name = "Town_Hall")
+@Entity(name = "townHall")
+@Table(name = "town_hall")
 public class TownHall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_town_hall;
+    private Long idTownHall;
 
     @ManyToOne
-    @JoinColumn(name = "id_login", referencedColumnName = "id_login", nullable = false)
+    @JoinColumn(name = "idLogin", referencedColumnName = "idLogin", nullable = false)
     private Login login;
 
     @NotBlank(message = "Can't be blank")
@@ -28,19 +28,19 @@ public class TownHall {
     public TownHall() {
     }
 
-    public TownHall(Long id_town_hall, Login login,String name, String address) {
-        this.id_town_hall = id_town_hall;
+    public TownHall(Long idTownHall, Login login, String name, String address) {
+        this.idTownHall = idTownHall;
         this.login = login;
         this.name = name;
         this.address = address;
     }
 
-    public Long getId_town_hall() {
-        return id_town_hall;
+    public Long getIdTownHall() {
+        return idTownHall;
     }
 
-    public void setId_town_hall(Long id_town_hall) {
-        this.id_town_hall = id_town_hall;
+    public void setIdTownHall(Long id_town_hall) {
+        this.idTownHall = id_town_hall;
     }
 
     public Login getLogin() {

@@ -6,16 +6,16 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Entity(name = "Child")
-@Table(name = "Child")
+@Entity(name = "child")
+@Table(name = "child")
 public class Child {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_child;
+    private Long idChild;
 
     @ManyToOne
-    @JoinColumn(name = "id_login", referencedColumnName = "id_login", nullable = false)
+    @JoinColumn(name = "idLogin", referencedColumnName = "idLogin", nullable = false)
     private Login login;
 
     @NotBlank(message = "Can't be blank")
@@ -24,22 +24,27 @@ public class Child {
 
     private int age;
 
+    @NotBlank(message = "Can't be blank")
+    @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces")
+    private String address;
+
     public Child() {
     }
 
-    public Child(Long id_child, Login login, String name, int age) {
-        this.id_child = id_child;
+    public Child(Long idChild, Login login, String name, int age,String address) {
+        this.idChild = idChild;
         this.login = login;
         this.name = name;
         this.age = age;
+        this.address=address;
     }
 
-    public Long getId_child() {
-        return id_child;
+    public Long getIdChild() {
+        return idChild;
     }
 
-    public void setId_child(Long id_child) {
-        this.id_child = id_child;
+    public void setIdChild(Long id_child) {
+        this.idChild = id_child;
     }
 
     public Login getLogin() {
@@ -64,5 +69,13 @@ public class Child {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

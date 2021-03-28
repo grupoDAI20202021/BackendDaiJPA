@@ -6,16 +6,16 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Entity(name = "Administrator")
-@Table(name = "Administrator")
+@Entity(name = "administrator")
+@Table(name = "administrator")
 
 public class Administrator {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_administrator;
+    private Long idAdministrator;
 
     @ManyToOne
-    @JoinColumn(name = "id_login", referencedColumnName = "id_login", nullable = false)
+    @JoinColumn(name = "idLogin", referencedColumnName = "idLogin", nullable = false)
     private Login login;
 
     @NotBlank(message = "Can't be blank")
@@ -30,12 +30,12 @@ public class Administrator {
     public Administrator() {
     }
 
-    public Long getId_administrator() {
-        return id_administrator;
+    public Long getIdAdministrator() {
+        return idAdministrator;
     }
 
-    public void setId_administrator(Long id_administrator) {
-        this.id_administrator = id_administrator;
+    public void setIdAdministrator(Long id_administrator) {
+        this.idAdministrator = id_administrator;
     }
 
     public Login getLogin() {
@@ -62,8 +62,8 @@ public class Administrator {
         this.contact = contact;
     }
 
-    public Administrator(Long id_administrator, Login login, String name, String contact) {
-        this.id_administrator = id_administrator;
+    public Administrator(Long idAdministrator, Login login, String name, String contact) {
+        this.idAdministrator = idAdministrator;
         this.login = login;
         this.name = name;
         this.contact = contact;

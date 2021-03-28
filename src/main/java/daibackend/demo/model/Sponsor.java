@@ -6,17 +6,17 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
-@Entity(name = "Sponsor")
-@Table(name = "Sponsor")
+@Entity(name = "sponsor")
+@Table(name = "sponsor")
 
 public class Sponsor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_sponsor;
+    private Long idSponsor;
 
     @ManyToOne
-    @JoinColumn(name = "id_town_hall", referencedColumnName = "id_town_hall", nullable = false)
+    @JoinColumn(name = "idTownHall", referencedColumnName = "idTownHall", nullable = false)
     private TownHall townHall;
 
     @NotBlank(message = "Can't be blank")
@@ -24,25 +24,25 @@ public class Sponsor {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "id_image", referencedColumnName = "id_image", nullable = false)
-    private ImageExample imageExample;
+    @JoinColumn(name = "idImage", referencedColumnName = "idImage", nullable = false)
+    private Image image;
 
     public Sponsor() {
     }
 
-    public Sponsor(Long id_sponsor, TownHall townHall,  String name, ImageExample imageExample) {
-        this.id_sponsor = id_sponsor;
+    public Sponsor(Long idSponsor, TownHall townHall, String name, Image image) {
+        this.idSponsor = idSponsor;
         this.townHall = townHall;
         this.name = name;
-        this.imageExample = imageExample;
+        this.image = image;
     }
 
-    public Long getId_sponsor() {
-        return id_sponsor;
+    public Long getIdSponsor() {
+        return idSponsor;
     }
 
-    public void setId_sponsor(Long id_sponsor) {
-        this.id_sponsor = id_sponsor;
+    public void setIdSponsor(Long id_sponsor) {
+        this.idSponsor = id_sponsor;
     }
 
     public TownHall getTownHall() {
@@ -61,11 +61,11 @@ public class Sponsor {
         this.name = name;
     }
 
-    public ImageExample getImageExample() {
-        return imageExample;
+    public Image getImageExample() {
+        return image;
     }
 
-    public void setImageExample(ImageExample imageExample) {
-        this.imageExample = imageExample;
+    public void setImageExample(Image image) {
+        this.image = image;
     }
 }

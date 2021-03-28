@@ -1,22 +1,25 @@
 package daibackend.demo.model;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
-@Entity(name = "Inscription")
-@Table(name = "Inscription")
+@Entity(name = "inscription")
+@Table(name = "inscription")
 @IdClass(InscriptionId.class)
-public class Inscription {
+public class Inscription implements Serializable {
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_child", referencedColumnName = "id_child", nullable = false)
-    private Child id_child;
+    @JoinColumn(name = "idChild", referencedColumnName = "idChild", nullable = false)
+    private Child child;
 
     @Id
     @ManyToOne
-    @JoinColumn(name = "id_activity", referencedColumnName = "id_activity", nullable = false)
-    private Activity id_activity;
+    @JoinColumn(name = "idActivity", referencedColumnName = "idActivity", nullable = false)
+    private Activity activity;
 
     private int presence;
 
@@ -25,27 +28,27 @@ public class Inscription {
     public Inscription() {
     }
 
-    public Inscription(Child id_child, Activity id_activity, int presence, int evaluation) {
-        this.id_child = id_child;
-        this.id_activity = id_activity;
+    public Inscription(Child child, Activity activity, int presence, int evaluation) {
+        this.child = child;
+        this.activity = activity;
         this.presence = presence;
         this.evaluation = evaluation;
     }
 
-    public Child getId_child() {
-        return id_child;
+    public Child getChild() {
+        return child;
     }
 
-    public void setId_child(Child id_child) {
-        this.id_child = id_child;
+    public void setChild(Child id_child) {
+        this.child = id_child;
     }
 
-    public Activity getId_activity() {
-        return id_activity;
+    public Activity getActivity() {
+        return activity;
     }
 
-    public void setId_activity(Activity id_activity) {
-        this.id_activity = id_activity;
+    public void setActivity(Activity id_activity) {
+        this.activity = id_activity;
     }
 
     public int getPresence() {
@@ -69,12 +72,12 @@ public class Inscription {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Inscription that = (Inscription) o;
-        return presence == that.presence && evaluation == that.evaluation && Objects.equals(id_child, that.id_child) && Objects.equals(id_activity, that.id_activity);
+        return presence == that.presence && evaluation == that.evaluation && Objects.equals(child, that.child) && Objects.equals(activity, that.activity);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id_child, id_activity, presence, evaluation);
+        return Objects.hash(child, activity, presence, evaluation);
     }
 }
 

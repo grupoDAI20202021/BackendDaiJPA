@@ -9,24 +9,24 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
-@Entity(name = "Activity")
-@Table(name="\"Activity\"")
+@Entity(name ="activity")
+@Table(name="activity")
 public class Activity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_activity;
+    private Long idActivity;
 
     @ManyToOne
-    @JoinColumn(name = "id_institution", referencedColumnName = "id_institution", nullable = false)
+    @JoinColumn(name = "idInstitution", referencedColumnName = "idInstitution", nullable = false)
     private Institution institution;
 
     @ManyToOne
-    @JoinColumn(name = "id_activity_type", referencedColumnName = "id_activity_type", nullable = false)
+    @JoinColumn(name = "idActivityType", referencedColumnName = "idActivityType", nullable = false)
     private ActivityType activityType;
 
     @ManyToOne
-    @JoinColumn(name = "id_sponsor", referencedColumnName = "id_sponsor", nullable = false)
+    @JoinColumn(name = "idSponsor", referencedColumnName = "idSponsor", nullable = false)
     private Sponsor sponsor;
 
     @NotBlank(message = "Can't be blank")
@@ -54,8 +54,8 @@ public class Activity {
     public Activity() {
     }
 
-    public Activity(Long id_activity, Institution institution, ActivityType activityType, Sponsor sponsor, String status, Date init_data, Date end_data, String address, int evaluation, int spaces) {
-        this.id_activity = id_activity;
+    public Activity(Long idActivity, Institution institution, ActivityType activityType, Sponsor sponsor, String status, Date init_data, Date end_data, String address, int evaluation, int spaces) {
+        this.idActivity = idActivity;
         this.institution = institution;
         this.activityType = activityType;
         this.sponsor = sponsor;
@@ -67,12 +67,12 @@ public class Activity {
         this.spaces = spaces;
     }
 
-    public Long getId_activity() {
-        return id_activity;
+    public Long getIdActivity() {
+        return idActivity;
     }
 
-    public void setId_activity(Long id_activity) {
-        this.id_activity = id_activity;
+    public void setIdActivity(Long id_activity) {
+        this.idActivity = id_activity;
     }
 
     public Institution getInstitution() {

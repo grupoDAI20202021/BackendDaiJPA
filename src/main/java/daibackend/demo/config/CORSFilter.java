@@ -1,5 +1,7 @@
 package daibackend.demo.config;
 
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +15,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Component
 public class CORSFilter implements Filter {
 
 	// This is to be replaced with a list of domains allowed to access the server
@@ -22,7 +25,7 @@ public class CORSFilter implements Filter {
 	public void destroy() {
 
 	}
-
+    @Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
 		// Lets make sure that we are working with HTTP (that is, against

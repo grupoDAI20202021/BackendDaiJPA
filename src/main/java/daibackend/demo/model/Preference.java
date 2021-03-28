@@ -2,36 +2,36 @@ package daibackend.demo.model;
 
 import javax.persistence.*;
 
-@Entity(name = "Preference")
-@Table(name = "Preference")
+@Entity(name = "preference")
+@Table(name = "preference")
 public class Preference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_preference;
+    private Long idPreference;
 
     @ManyToOne
-    @JoinColumn(name = "id_child", referencedColumnName = "id_child", nullable = false)
+    @JoinColumn(name = "idChild", referencedColumnName = "idChild", nullable = false)
     private Child child;
 
     @ManyToOne
-    @JoinColumn(name = "id_activity_type", referencedColumnName = "id_activity_type", nullable = false)
+    @JoinColumn(name = "idActivityType", referencedColumnName = "idActivityType", nullable = false)
     private ActivityType activityType;
 
     public Preference() {
     }
 
-    public Preference(Long id_preference, Child child, ActivityType activityType) {
-        this.id_preference = id_preference;
+    public Preference(Long idPreference, Child child, ActivityType activityType) {
+        this.idPreference = idPreference;
         this.child = child;
         this.activityType = activityType;
     }
 
-    public Long getId_preference() {
-        return id_preference;
+    public Long getIdPreference() {
+        return idPreference;
     }
 
-    public void setId_preference(Long id_preference) {
-        this.id_preference = id_preference;
+    public void setIdPreference(Long id_preference) {
+        this.idPreference = id_preference;
     }
 
     public Child getChild() {

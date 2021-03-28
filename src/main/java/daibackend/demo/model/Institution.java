@@ -7,20 +7,20 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 
-@Entity(name = "Institution")
-@Table(name = "Institution")
+@Entity(name = "institution")
+@Table(name = "institution")
 
 public class Institution {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_institution;
+    private Long idInstitution;
 
     @ManyToOne
-    @JoinColumn(name = "id_login", referencedColumnName = "id_login", nullable = false)
+    @JoinColumn(name = "idLogin", referencedColumnName = "idLogin", nullable = false)
     private Login login;
 
     @ManyToOne
-    @JoinColumn(name = "id_town_hall", referencedColumnName = "id_town_hall", nullable = false)
+    @JoinColumn(name = "idTownHall", referencedColumnName = "idTownHall", nullable = false)
     private TownHall townHall;
 
     @NotBlank(message = "Can't be blank")
@@ -34,20 +34,20 @@ public class Institution {
     public Institution() {
     }
 
-    public Institution(Long id_institution, Login login, TownHall townHall, String name, String address) {
-        this.id_institution = id_institution;
+    public Institution(Long idInstitution, Login login, TownHall townHall, String name, String address) {
+        this.idInstitution = idInstitution;
         this.login = login;
         this.townHall = townHall;
         this.name = name;
         this.address = address;
     }
 
-    public Long getId_institution() {
-        return id_institution;
+    public Long getIdInstitution() {
+        return idInstitution;
     }
 
-    public void setId_institution(Long id_institution) {
-        this.id_institution = id_institution;
+    public void setIdInstitution(Long id_institution) {
+        this.idInstitution = id_institution;
     }
 
     public Login getLogin() {
