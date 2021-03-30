@@ -1,37 +1,24 @@
-package daibackend.demo.model;
+package daibackend.demo.model.custom;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import daibackend.demo.model.ActivityType;
+import daibackend.demo.model.Institution;
 import daibackend.demo.util.ConstantUtils;
 
-import javax.persistence.*;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
-@Entity(name ="activity")
-@Table(name="activity")
-public class Activity {
+public class CreateActivity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idActivity;
-
-    @ManyToOne
-    @JoinColumn(name = "idInstitution", referencedColumnName = "idInstitution", nullable = false)
     private Institution institution;
 
-    @ManyToOne
-    @JoinColumn(name = "idActivityType", referencedColumnName = "idActivityType", nullable = false)
     private ActivityType activityType;
-
-    @ManyToOne
-    @JoinColumn(name = "idSponsor", referencedColumnName = "idSponsor", nullable = false)
-    private Sponsor sponsor;
-
-    @NotBlank(message = "Can't be blank")
-    @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces")
-    private String status;
 
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -44,6 +31,10 @@ public class Activity {
     private Date end_data;
 
     @NotBlank(message = "Can't be blank")
+    @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces")
+    private String status;
+
+    @NotBlank(message = "Can't be blank")
     @Pattern(regexp = ConstantUtils.ADDRESS_PATTERN, message = "Can only letters, letters with special characters, numbers and special characters (\",\", \"º\", \" \")")
     private String address;
 
@@ -51,28 +42,15 @@ public class Activity {
 
     private int spaces;
 
-    public Activity() {
-    }
-
-    public Activity(Long idActivity, Institution institution, ActivityType activityType, String status, Date init_data, Date end_data, String address, int spaces) {
-        this.idActivity = idActivity;
+    public CreateActivity(Institution institution, ActivityType activityType,Date init_data,  Date end_data,  String status, String address, int evaluation, int spaces) {
         this.institution = institution;
         this.activityType = activityType;
-        this.sponsor = null;
-        this.status = status;
         this.init_data = init_data;
         this.end_data = end_data;
+        this.status = status;
         this.address = address;
-        this.evaluation = 0;
+        this.evaluation = evaluation;
         this.spaces = spaces;
-    }
-
-    public Long getIdActivity() {
-        return idActivity;
-    }
-
-    public void setIdActivity(Long id_activity) {
-        this.idActivity = id_activity;
     }
 
     public Institution getInstitution() {
@@ -91,22 +69,6 @@ public class Activity {
         this.activityType = activityType;
     }
 
-    public Sponsor getSponsor() {
-        return sponsor;
-    }
-
-    public void setSponsor(Sponsor sponsor) {
-        this.sponsor = sponsor;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public Date getInit_data() {
         return init_data;
     }
@@ -121,6 +83,14 @@ public class Activity {
 
     public void setEnd_data(Date end_data) {
         this.end_data = end_data;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getAddress() {
