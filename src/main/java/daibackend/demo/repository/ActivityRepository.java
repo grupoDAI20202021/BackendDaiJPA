@@ -42,14 +42,14 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE activity A SET A.address= ?1, A.init_data= ?2 ,A.end_data= ?3 WHERE A.idActivity = ?4")
-    void updateActivityAsInstituition(String address, Date init_data, Date end_data, Long idActivity);  // ver se é import Data sql ou java
+    @Query("UPDATE activity A SET A.address= ?1, A.init_data= ?2 ,A.end_data= ?3, A.spaces=?4 WHERE A.idActivity = ?5")
+    void updateActivityAsInstituition(String address, Date init_data, Date end_data,int spaces, Long idActivity);  // ver se é import Data sql ou java
 
 
     @Transactional
     @Modifying
-    @Query("UPDATE activity A SET A.sponsor= ?1, A.init_data= ?2 ,A.end_data= ?3,A.address= ?4 WHERE A.idActivity = ?5")
-    void updateActivityAsTownHall(Sponsor sponsor, Date init_data, Date end_data, String address,Long idActivity);
+    @Query("UPDATE activity A SET A.sponsor.idSponsor= ?1, A.init_data= ?2 ,A.end_data= ?3, A.status=?5 WHERE A.idActivity = ?4")
+    void updateActivityAsTownHall(long idSponsor, Date init_data, Date end_data,Long idActivity,String status);
 
     @Override
     void delete(Activity activity);
