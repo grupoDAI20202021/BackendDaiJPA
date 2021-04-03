@@ -37,8 +37,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE activity A SET A.evaluation= ?1 where A.idActivity = ?2")
-    void updateActivityEvaluation(int points ,Long idActivity);
+    @Query("UPDATE activity A SET A.evaluation= ?1, A.status=?2 where A.idActivity = ?3")
+    void updateActivityEvaluation(int points , String status, Long idActivity);
 
     @Transactional
     @Modifying

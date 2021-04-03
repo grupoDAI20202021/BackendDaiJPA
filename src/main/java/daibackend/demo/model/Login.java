@@ -26,26 +26,26 @@ public class Login {
     @Pattern(regexp = ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number")
     private String password;
 
-    @NotBlank(message = "Can't be blank")
-    @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Allow only letters, letters with special characters and spaces")
-    private String profile;
+    @OneToOne
+    @JoinColumn(name = "idRole", referencedColumnName = "idRole", nullable = true)
+    private Role role;
 
     public Login() {
     }
 
-    public Login(Long idLogin, String email, String password, String profile) {
+    public Login(Long idLogin, @Email(message = "Insert a valid email") String email, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number") String password, Role role) {
         this.idLogin = idLogin;
         this.email = email;
         this.password = password;
-        this.profile = profile;
+        this.role = role;
     }
 
     public Long getIdLogin() {
         return idLogin;
     }
 
-    public void setIdLogin(Long id_login) {
-        this.idLogin = id_login;
+    public void setIdLogin(Long idLogin) {
+        this.idLogin = idLogin;
     }
 
     public String getEmail() {
@@ -64,12 +64,11 @@ public class Login {
         this.password = password;
     }
 
-    public String getProfile() {
-        return profile;
+    public Role getRole() {
+        return role;
     }
 
-    public void setProfile(String profile) {
-        this.profile = profile;
+    public void setRole(Role role) {
+        this.role = role;
     }
-
 }

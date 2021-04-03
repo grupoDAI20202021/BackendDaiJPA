@@ -42,7 +42,11 @@ public class CreateActivity {
 
     private int spaces;
 
-    public CreateActivity(Institution institution, ActivityType activityType,Date init_data,  Date end_data,  String status, String address, int evaluation, int spaces) {
+    @NotBlank(message = "Can't be blank")
+    @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces")
+    private String title;
+
+    public CreateActivity(Institution institution, ActivityType activityType, Date init_data,  Date end_data, String status, String address, int evaluation, int spaces,  String title) {
         this.institution = institution;
         this.activityType = activityType;
         this.init_data = init_data;
@@ -51,6 +55,7 @@ public class CreateActivity {
         this.address = address;
         this.evaluation = evaluation;
         this.spaces = spaces;
+        this.title = title;
     }
 
     public Institution getInstitution() {
@@ -115,5 +120,13 @@ public class CreateActivity {
 
     public void setSpaces(int spaces) {
         this.spaces = spaces;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

@@ -47,6 +47,10 @@ public class Activity {
     @Pattern(regexp = ConstantUtils.ADDRESS_PATTERN, message = "Can only letters, letters with special characters, numbers and special characters (\",\", \"º\", \" \")")
     private String address;
 
+    @NotBlank(message = "Can't be blank")
+    @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces")
+    private String title;
+
     private int evaluation;
 
     private int spaces;
@@ -54,16 +58,17 @@ public class Activity {
     public Activity() {
     }
 
-    public Activity(Long idActivity, Institution institution, ActivityType activityType, String status, Date init_data, Date end_data, String address, int spaces) {
+    public Activity(Long idActivity, Institution institution, ActivityType activityType, Sponsor sponsor, String status,  Date init_data,  Date end_data,  String address,  String title, int evaluation, int spaces) {
         this.idActivity = idActivity;
         this.institution = institution;
         this.activityType = activityType;
-        this.sponsor = null;
+        this.sponsor = sponsor;
         this.status = status;
         this.init_data = init_data;
         this.end_data = end_data;
         this.address = address;
-        this.evaluation = 0;
+        this.title = title;
+        this.evaluation = evaluation;
         this.spaces = spaces;
     }
 
@@ -71,8 +76,8 @@ public class Activity {
         return idActivity;
     }
 
-    public void setIdActivity(Long id_activity) {
-        this.idActivity = id_activity;
+    public void setIdActivity(Long idActivity) {
+        this.idActivity = idActivity;
     }
 
     public Institution getInstitution() {
@@ -131,6 +136,14 @@ public class Activity {
         this.address = address;
     }
 
+    public String getName() {
+        return title;
+    }
+
+    public void setName(String name) {
+        this.title = name;
+    }
+
     public int getEvaluation() {
         return evaluation;
     }
@@ -145,5 +158,13 @@ public class Activity {
 
     public void setSpaces(int spaces) {
         this.spaces = spaces;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

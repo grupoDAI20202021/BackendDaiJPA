@@ -5,6 +5,7 @@ import daibackend.demo.model.Institution;
 import daibackend.demo.model.Sponsor;
 import daibackend.demo.model.TownHall;
 import daibackend.demo.model.custom.TownHallList;
+import daibackend.demo.model.custom.updateActivityEvaluation;
 import daibackend.demo.model.custom.updateActivityInstitution;
 import daibackend.demo.model.custom.updateActivityTownHall;
 import daibackend.demo.payload.response.ApiResponse;
@@ -51,6 +52,21 @@ import java.util.logging.Logger;
         }
 
 
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/activities/{idActivity}")
+    public Activity findActivity(/*@CurrentUser UserPrincipal currentUser*/@PathVariable long idActivity) {
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        return activityRepository.findByIdActivity(idActivity);
+    }
+
+
         //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
         @GetMapping("/activities/by-townhall/{idTownHall}/{status}")
         public List<Activity> listActivitiesTownHall(@PathVariable(value = "idTownHall") long idTownHall, @PathVariable String status) {
@@ -76,6 +92,7 @@ import java.util.logging.Logger;
                 Long idActivity = activity.getIdActivity();
                 Date init_data  = activity.getInit_data();
                 Date end_data  = activity.getEnd_data();
+                String title = activity.getTitle();
                 String status = "Por aprovar";
                 int spaces = activity.getSpaces();
                 Institution institution = activity.getInstitution();
@@ -157,14 +174,14 @@ import java.util.logging.Logger;
 
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  Institution
     @PutMapping("/activities/{idActivity}/evaluation")
-    public ResponseEntity<ApiResponse> updateActivityEvaluation(@PathVariable (value="idActivity")long idActivity, @RequestBody int evaluation) {
+    public ResponseEntity<ApiResponse> updateActivityEvaluation(@PathVariable (value="idActivity")long idActivity, @RequestBody updateActivityEvaluation update) {
         try {
             if(activityRepository.findByIdActivity(idActivity).equals(null)){
                 return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                         HttpStatus.BAD_REQUEST);
             }
-
-            activityRepository.updateActivityEvaluation(evaluation,idActivity);
+            int evaluation= update.getEvaluation();
+            activityRepository.updateActivityEvaluation(evaluation,"Finalizada",idActivity);
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Activity updated.", idActivity),
                     HttpStatus.CREATED);
             //User userLogged = userRepository.findByUserId(currentUser.getId());
