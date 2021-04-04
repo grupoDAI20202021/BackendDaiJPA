@@ -1,19 +1,15 @@
 package daibackend.demo.controller;
 
 
-import daibackend.demo.model.Child;
-import daibackend.demo.model.Login;
-import daibackend.demo.model.Role;
-import daibackend.demo.model.custom.CreateChild;
-import daibackend.demo.model.custom.InscriptionActivitiesByChildList;
-import daibackend.demo.model.custom.InscriptionChildrenByActivityList;
+import daibackend.demo.model.*;
+import daibackend.demo.model.custom.*;
 import daibackend.demo.payload.response.ApiResponse;
+import daibackend.demo.repository.ActivityRepository;
 import daibackend.demo.repository.ChildRepository;
 import daibackend.demo.repository.InscriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +23,9 @@ public class InscriptionController {
 
     @Autowired
     InscriptionRepository inscriptionRepository;
+
+    @Autowired
+    ActivityRepository activityRepository;
 
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
     @GetMapping("/children/{idChild}/activities")
@@ -57,52 +56,107 @@ public class InscriptionController {
 
         return inscriptionRepository.findAllByChildActivity(idActivity);
     }
-    //@PostMapping("/activities/{idActivity}/children") // Creat inscription
-    //public ResponseEntity<ApiResponse> saveChild(@RequestBody CreateChild child) {
-       // try {
-            // Activity Attributes
-           /*
-            String email  = child.getEmail();
-            String password  = child.getPassword();
-            String confirmPassword = child.getConfirmPassword();
-            String name= child.getName();
-            Role role = child.getRole();
-            int age = child.getAge();
-            String address = child.getAddress();
-            if (!confirmPassword.equals(password)) {
-                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Passwords não são iguais."),
-                        HttpStatus.BAD_REQUEST);
-            }
-            if (loginRepository.existsByEmail(email)) {
-                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Email já em utilização."),
-                        HttpStatus.BAD_REQUEST);
-            }
-            if (String.valueOf(password).length() < 6 || String.valueOf(password).length() > 24) {
-                return new ResponseEntity<ApiResponse>(
-                        new ApiResponse(false, "Password must contain between 6 to 24 characters"),
+    @PostMapping("/activities/{idActivity}/children") // Creat inscription  ignorar para ja
+    public ResponseEntity<ApiResponse> saveInscription(@PathVariable long idActivity,@RequestBody CreateInscription inscription) {
+        try {
+            long idChild = inscription.getIdChild();
+
+            if (childRepository.findDistinctByIdChild(idChild).equals(null)) {
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Criança não existe."),
                         HttpStatus.BAD_REQUEST);
             }
 
-            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String hashedPassword = passwordEncoder.encode(password);
-            // Create Login
-            Login l = new Login(null,email,hashedPassword,role);
-            loginRepository.save(l);
+            if (!activityRepository.findByIdActivity(idActivity).getStatus().equals("Aprovada")) {
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Inscrição inválida."),
+                        HttpStatus.BAD_REQUEST);
+            }
+            Inscription I = new Inscription();
+            I.setChild(childRepository.findDistinctByIdChild(idChild));
+            I.setActivity(activityRepository.findByIdActivity(idActivity));
+            inscriptionRepository.saveInscription(idChild,idActivity , I.getPresence(), I.getEvaluation());
 
-            // Create Child
-            Child newChild = new Child(null,l,name,age,address);
-            childRepository.save(newChild);
-
-            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created",loginRepository.findDistinctByEmail(email).getIdLogin()),
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Inscription created",I.getChild().getIdChild()),
                     HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
-                     */
+        }
+    }
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PutMapping("/activities/{idActivity}/children/{idChild}")
+    public ResponseEntity<ApiResponse> updateInscriptionEvaluation(@PathVariable (value="idChild")long idChild,@PathVariable (value="idActivity")long idActivity, @RequestBody updateInt update) {
+        try {
+            if (childRepository.findDistinctByIdChild(idChild).equals(null) || activityRepository.findByIdActivity(idActivity).equals(null)) {
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                        HttpStatus.BAD_REQUEST);
+            }
 
-       // }
+            if (update.getInt() != 1 && update.getInt() != 2 && update.getInt() != 3 && update.getInt() != 4 && update.getInt() != 5) {
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Evaluation invalid."),
+                        HttpStatus.BAD_REQUEST);
+            }
+            inscriptionRepository.updateEvaluation(update.getInt(), idChild, idActivity);
 
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Evaluation updated.", idChild),
+                    HttpStatus.CREATED);
+            //User userLogged = userRepository.findByUserId(currentUser.getId());
+            //Set<Role> roleUserLogged = userLogged.getRoles();
 
-   // }
+            // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        } catch (Exception e) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+        //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+        @PutMapping("/activities/{idActivity}/children/{idChild}/presence")
+        public ResponseEntity<ApiResponse> updateInscriptionpresence(@PathVariable (value="idChild")long idChild,@PathVariable (value="idActivity")long idActivity, @RequestBody updateInt update) {
+            try {
+                if(childRepository.findDistinctByIdChild(idChild).equals(null)|| activityRepository.findByIdActivity(idActivity).equals(null)){
+                    return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                            HttpStatus.BAD_REQUEST);
+                }
+
+                if(update.getInt()!=1&&update.getInt()!=0){
+                    return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Presence invalid."),
+                            HttpStatus.BAD_REQUEST);
+                }
+
+                inscriptionRepository.updatePresence(update.getInt(),idChild,idActivity);
+
+                return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Presence updated.", idChild),
+                        HttpStatus.CREATED);
+                //User userLogged = userRepository.findByUserId(currentUser.getId());
+                //Set<Role> roleUserLogged = userLogged.getRoles();
+
+                // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+            } catch (Exception e) {
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                        HttpStatus.BAD_REQUEST);
+            }
+    }
+
+    @DeleteMapping("/activities/{idActivity}/children/{idChild}")
+    public ResponseEntity<ApiResponse> deleteInscription(@PathVariable (value="idChild")long idChild,@PathVariable (value="idActivity")long idActivity) {
+        try {
+            Child child = childRepository.findDistinctByIdChild(idChild);
+            Activity activity = activityRepository.findByIdActivity(idActivity);
+            inscriptionRepository.deleteInscriptionByActivityAndChild(idActivity,idChild);
+
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Inscription deleted.", idChild),
+                    HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
 }

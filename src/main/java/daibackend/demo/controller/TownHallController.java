@@ -16,7 +16,7 @@ public class TownHallController {
     TownHallRepository townHallRepository;
 
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
-    @GetMapping("/townhall")
+    @GetMapping("/townhalls")
     public List<TownHallList> listTownHalls(/*@CurrentUser UserPrincipal currentUser*/) {
         //User userLogged = userRepository.findByUserId(currentUser.getId());
         //Set<Role> roleUserLogged = userLogged.getRoles();

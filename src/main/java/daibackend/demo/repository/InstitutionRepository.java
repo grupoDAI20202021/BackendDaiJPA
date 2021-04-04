@@ -10,9 +10,9 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface InstitutionRepository extends JpaRepository<Institution, Long> {
-    Institution findDistinctByIdInstitution(long id_insititution);
+    Institution findDistinctByIdInstitution(long id_institution);
 
-    @Query(value = "SELECT new daibackend.demo.model.custom.InstitutionList(L.email,T.name,T.address) FROM login L, institution T where L.idLogin= T.login.idLogin" )
+    @Query(value = "SELECT new daibackend.demo.model.custom.InstitutionList(L.email,T.name,T.address,T.idInstitution) FROM login L, institution T where L.idLogin= T.login.idLogin" )
     List<InstitutionList> findAllInstitution();
 
     @Transactional

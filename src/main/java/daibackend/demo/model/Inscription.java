@@ -35,6 +35,11 @@ public class Inscription implements Serializable {
         this.evaluation = evaluation;
     }
 
+    public Inscription(Child child, Activity activity) {
+        this.child = child;
+        this.activity = activity;
+    }
+
     public Child getChild() {
         return child;
     }
@@ -78,6 +83,16 @@ public class Inscription implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(child, activity, presence, evaluation);
+    }
+
+    @Override
+    public String toString() {
+        return "Inscription{" +
+                "child=" + child +
+                ", activity=" + activity +
+                ", presence=" + presence +
+                ", evaluation=" + evaluation +
+                '}';
     }
 }
 

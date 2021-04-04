@@ -4,14 +4,16 @@ public class InstitutionList {
     private String email;
     private String name;
     private String address;
+    private long idInstitution;
 
     public InstitutionList() {
     }
 
-    public InstitutionList(String email, String name, String address) {
+    public InstitutionList(String email, String name, String address, long idInstitution) {
         this.email = email;
         this.name = name;
         this.address = address;
+        this.idInstitution = idInstitution;
     }
 
     public String getEmail() {
@@ -36,5 +38,13 @@ public class InstitutionList {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public long getIdInstitution() {
+        return idInstitution;
+    }
+
+    public void setIdInstitution(long idInstitution) {
+        this.idInstitution = idInstitution;
     }
 }
