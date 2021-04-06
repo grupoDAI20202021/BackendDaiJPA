@@ -1,10 +1,13 @@
 package daibackend.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import daibackend.demo.util.ConstantUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 @Entity(name = "sponsor")
 @Table(name = "sponsor")
@@ -27,14 +30,20 @@ public class Sponsor {
     @JoinColumn(name = "idImage", referencedColumnName = "idImage", nullable = false)
     private Image image;
 
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @NotNull(message = "Can't be null")
+    private Date insert_data;
+
     public Sponsor() {
     }
 
-    public Sponsor(Long idSponsor, TownHall townHall, String name, Image image) {
+    public Sponsor(Long idSponsor, TownHall townHall, String name, Image image,Date insert_data) {
         this.idSponsor = idSponsor;
         this.townHall = townHall;
         this.name = name;
         this.image = image;
+        this.insert_data=insert_data;
     }
 
     public Long getIdSponsor() {
@@ -61,11 +70,19 @@ public class Sponsor {
         this.name = name;
     }
 
-    public Image getImageExample() {
+    public Image getImage() {
         return image;
     }
 
-    public void setImageExample(Image image) {
+    public void setImage(Image image) {
         this.image = image;
+    }
+
+    public Date getInsert_data() {
+        return insert_data;
+    }
+
+    public void setInsert_data(Date insert_data) {
+        this.insert_data = insert_data;
     }
 }

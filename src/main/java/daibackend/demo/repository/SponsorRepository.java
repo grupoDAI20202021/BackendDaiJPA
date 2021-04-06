@@ -3,6 +3,7 @@ package daibackend.demo.repository;
 import daibackend.demo.model.Image;
 import daibackend.demo.model.Sponsor;
 import daibackend.demo.model.TownHall;
+import daibackend.demo.model.custom.SponsorList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,7 +17,8 @@ public interface SponsorRepository extends JpaRepository<Sponsor, Long> {
     @Override
     List<Sponsor> findAll();
 
-    List<Sponsor> findAllByTownHall(TownHall townHall);
+    @Query("SELECT new daibackend.demo.model.custom.SponsorList(S.idSponsor,S.name,S.insert_data,S.image.idImage) FROM sponsor S where S.townHall.idTownHall=?1")
+    List<SponsorList> findAllByTownHall(long idTownHall);
 
     @Transactional
     @Modifying
@@ -30,4 +32,6 @@ public interface SponsorRepository extends JpaRepository<Sponsor, Long> {
 
     @Override
     void delete(Sponsor sponsor);
+
+    boolean existsByName(String name);
 }

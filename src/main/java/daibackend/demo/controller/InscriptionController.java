@@ -56,7 +56,7 @@ public class InscriptionController {
 
         return inscriptionRepository.findAllByChildActivity(idActivity);
     }
-    @PostMapping("/activities/{idActivity}/children") // Creat inscription  ignorar para ja
+    @PostMapping("/activities/{idActivity}/children") // Creat inscription
     public ResponseEntity<ApiResponse> saveInscription(@PathVariable long idActivity,@RequestBody CreateInscription inscription) {
         try {
             long idChild = inscription.getIdChild();

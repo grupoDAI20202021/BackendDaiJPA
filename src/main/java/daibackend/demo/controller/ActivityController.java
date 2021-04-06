@@ -111,7 +111,7 @@ import java.util.logging.Logger;
         }
 
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // TownHall
-    @PutMapping("/activities/{idActivity}/townhall")
+    @PutMapping("/activities/{idActivity}/sponsor")
     public ResponseEntity<ApiResponse> updateActivitySponsor(@PathVariable (value="idActivity")long idActivity, @RequestBody updateActivityTownHall update) {
         try {
     if(activityRepository.findByIdActivity(idActivity).equals(null)){

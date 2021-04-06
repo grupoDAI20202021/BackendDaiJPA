@@ -33,15 +33,19 @@ public class Sugestion {
     @NotNull(message = "Can't be null")
     private Date init_data;
 
+    private int checked;
+
+
     public Sugestion() {
     }
 
-    public Sugestion(Long idSugestion, Child child, String content,  byte voice, Date init_data) {
+    public Sugestion(Long idSugestion, Child child, String content,  byte voice, Date init_data,int checked) {
         this.idSugestion = idSugestion;
         this.child = child;
         this.content = content;
         this.voice = voice;
         this.init_data=init_data;
+        this.checked=checked;
     }
 
     public Long getIdSugestion() {
@@ -82,5 +86,13 @@ public class Sugestion {
 
     public void setInit_data(Date init_data) {
         this.init_data = init_data;
+    }
+
+    public int getChecked() {
+        return checked;
+    }
+
+    public void setChecked(int checked) {
+        this.checked = checked;
     }
 }
