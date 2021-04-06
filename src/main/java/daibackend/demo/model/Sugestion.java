@@ -35,17 +35,20 @@ public class Sugestion {
 
     private int checked;
 
+    private int experience;
+
 
     public Sugestion() {
     }
 
-    public Sugestion(Long idSugestion, Child child, String content,  byte voice, Date init_data,int checked) {
+    public Sugestion(Long idSugestion, Child child, String content,  byte voice, Date init_data,int checked,int experience) {
         this.idSugestion = idSugestion;
         this.child = child;
         this.content = content;
         this.voice = voice;
         this.init_data=init_data;
         this.checked=checked;
+        this.experience=experience;
     }
 
     public Long getIdSugestion() {
@@ -94,5 +97,13 @@ public class Sugestion {
 
     public void setChecked(int checked) {
         this.checked = checked;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
     }
 }

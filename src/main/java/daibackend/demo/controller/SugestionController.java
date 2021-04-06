@@ -4,6 +4,9 @@ import daibackend.demo.model.ActivityType;
 import daibackend.demo.model.Child;
 import daibackend.demo.model.Preference;
 import daibackend.demo.model.Sugestion;
+import daibackend.demo.model.custom.CreateSugestion;
+import daibackend.demo.model.custom.updateEmail;
+import daibackend.demo.model.custom.updateInt;
 import daibackend.demo.payload.response.ApiResponse;
 import daibackend.demo.repository.ChildRepository;
 import daibackend.demo.repository.SugestionRepository;
@@ -12,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -66,26 +70,54 @@ public class SugestionController {
         return sugestionRepository.findAllByChild(child);
     }
 
-    @PostMapping("/sugestions") // Creat sugestion
-    public ResponseEntity<ApiResponse> saveSugestion() {
+    @PostMapping("/sugestions") // Create sugestion
+    public ResponseEntity<ApiResponse> saveSugestion(@RequestBody CreateSugestion createSugestion) {
         try {
-            Child child = childRepository.findDistinctByIdChild(idChild);
-            ActivityType activityType = activityTypeRepository.findDistinctByIdActivityType(idActivityType);
-
-            if (childRepository.findDistinctByIdChild(idChild).equals(null)) {
+            Child child = childRepository.findDistinctByIdChild(createSugestion.getIdChild());
+            int checked = 0;
+            String content= createSugestion.getContent();
+            int experience = createSugestion.getExperience();
+            Date date = new Date();
+            if (child.equals(null)) {
                 return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Criança não existe."),
                         HttpStatus.BAD_REQUEST);
             }
 
-            if (activityTypeRepository.findDistinctByIdActivityType(idActivityType).equals(null)) {
-                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Activity type inválida."),
+            if (experience != 1 && experience != 2 && experience != 3) {
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Experience inválida."),
                         HttpStatus.BAD_REQUEST);
             }
-            Preference P = new Preference(null,child,activityType);
-            preferenceRepository.save(P);
-            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Preference created",P.getChild().getIdChild()),
+            Sugestion sugestion = new Sugestion(null,child,content, (byte) 1,date,checked,experience);
+            sugestionRepository.save(sugestion);
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Sugestion created",sugestion.getIdSugestion()),
                     HttpStatus.CREATED);
 
+        } catch (Exception e) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PutMapping("/sugestions/{idSugestion}")
+    public ResponseEntity<ApiResponse> updateSugestion(@PathVariable (value="idInstitution")long idSugestion) {
+        try {
+            if(sugestionRepository.findDistinctByIdSugestion(idSugestion).equals(null)){
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                        HttpStatus.BAD_REQUEST);
+            }
+            sugestionRepository.updateSugestion(1,idSugestion);
+
+
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Sugestion updated.", idSugestion),
+                    HttpStatus.CREATED);
+            //User userLogged = userRepository.findByUserId(currentUser.getId());
+            //Set<Role> roleUserLogged = userLogged.getRoles();
+
+            // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
