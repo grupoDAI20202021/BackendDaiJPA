@@ -86,6 +86,11 @@ public class InstitutionController {
                         new ApiResponse(false, "TownHall doesn´t exist."),
                         HttpStatus.BAD_REQUEST);
             }
+            if(!(role.getIdRole() ==2)){
+                return new ResponseEntity<ApiResponse>(
+                        new ApiResponse(false, "Role inválido"),
+                        HttpStatus.BAD_REQUEST);
+            }
 
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPassword = passwordEncoder.encode(password);

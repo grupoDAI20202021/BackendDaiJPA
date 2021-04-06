@@ -6,6 +6,7 @@ import daibackend.demo.model.Inscription;
 import daibackend.demo.model.InscriptionId;
 import daibackend.demo.model.custom.InscriptionActivitiesByChildList;
 import daibackend.demo.model.custom.InscriptionChildrenByActivityList;
+import daibackend.demo.model.custom.RankList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,9 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface InscriptionRepository extends JpaRepository<Inscription, InscriptionId> {
+
+    @Query(value ="Select new daibackend.demo.model.custom.RankList(C.idChild,C.name,C.age,Sum(I.evaluation)) from child C left join inscription I on C.idChild=I.child.idChild group by C.idChild order by SUM(I.evaluation) desc")
+    List <RankList> findRankByPoints();
 
     Inscription findDistinctByActivityAndChild(Activity activity, Child child);
 

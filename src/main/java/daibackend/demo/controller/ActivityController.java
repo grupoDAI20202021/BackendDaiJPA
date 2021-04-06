@@ -4,20 +4,19 @@ import daibackend.demo.model.Activity;
 import daibackend.demo.model.Institution;
 import daibackend.demo.model.Sponsor;
 import daibackend.demo.model.TownHall;
-import daibackend.demo.model.custom.TownHallList;
-import daibackend.demo.model.custom.updateActivityEvaluation;
-import daibackend.demo.model.custom.updateActivityInstitution;
-import daibackend.demo.model.custom.updateActivityTownHall;
+import daibackend.demo.model.custom.*;
 import daibackend.demo.payload.response.ApiResponse;
 import daibackend.demo.repository.ActivityRepository;
 import daibackend.demo.repository.SponsorRepository;
 import daibackend.demo.repository.TownHallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
+import java.awt.print.Pageable;
+import java.text.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -209,6 +208,80 @@ import java.util.logging.Logger;
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
+    }
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/activitiesyear")
+    public ActivitiesInYear listActivitiesYear(/*@CurrentUser UserPrincipal currentUser*/) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1 = simpleDateFormat.parse("2021-01-01");
+            date2 = simpleDateFormat.parse("2021-01-31");
+            int jan = activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-02-01");
+            date2 = simpleDateFormat.parse("2021-02-28");
+            int feb = activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-03-01");
+            date2 = simpleDateFormat.parse("2021-03-31");
+            int mar= activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-04-01");
+            date2 = simpleDateFormat.parse("2021-04-30");
+            int apr= activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-05-01");
+            date2 = simpleDateFormat.parse("2021-05-31");
+            int may= activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-06-01");
+            date2 = simpleDateFormat.parse("2021-06-30");
+            int jun= activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-07-01");
+            date2 = simpleDateFormat.parse("2021-07-31");
+            int jul= activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-08-01");
+            date2 = simpleDateFormat.parse("2021-08-31");
+            int aug= activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-09-01");
+            date2 = simpleDateFormat.parse("2021-09-30");
+            int sep= activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-10-01");
+            date2 = simpleDateFormat.parse("2021-10-31");
+            int oct= activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-11-01");
+            date2 = simpleDateFormat.parse("2021-11-30");
+            int nov= activityRepository.findAllByInit_dataBetween(date1,date2);
+            date1 = simpleDateFormat.parse("2021-12-01");
+            date2 = simpleDateFormat.parse("2021-12-31");
+            int dec= activityRepository.findAllByInit_dataBetween(date1,date2);
+            ActivitiesInYear activitiesInYear = new ActivitiesInYear(jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec);
+            return activitiesInYear;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+      return null;
+    }
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/lastactivities")
+    public List<ActivityList> listActivitiesLast(/*@CurrentUser UserPrincipal currentUser*/) {
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        return activityRepository.findLast8( PageRequest.of(0,8));
     }
     }
 

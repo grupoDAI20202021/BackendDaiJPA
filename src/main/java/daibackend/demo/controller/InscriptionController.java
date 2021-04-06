@@ -159,4 +159,19 @@ public class InscriptionController {
                     HttpStatus.BAD_REQUEST);
         }
     }
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/ranks")
+    public List<RankList> listRanks(/*@CurrentUser UserPrincipal currentUser*/) {
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+
+        return inscriptionRepository.findRankByPoints();
+    }
 }
