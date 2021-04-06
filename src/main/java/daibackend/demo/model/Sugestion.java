@@ -23,7 +23,7 @@ public class Sugestion {
     private Child child;
 
     @NotBlank(message = "Can't be blank")
-    @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces")
+    @Pattern(regexp = ConstantUtils.DESCRIPTION_PATTERN, message = "Allow only letters, letters with special characters, numbers and spaces")
     private String content;
 
     private byte voice;

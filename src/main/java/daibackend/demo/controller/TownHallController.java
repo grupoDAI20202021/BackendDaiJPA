@@ -1,9 +1,11 @@
 package daibackend.demo.controller;
 
+import daibackend.demo.model.TownHall;
 import daibackend.demo.model.custom.TownHallList;
 import daibackend.demo.repository.TownHallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,5 +29,20 @@ public class TownHallController {
             return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
         }*/
         return townHallRepository.findAllTownHallList();
+    }
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/townhalls/{idTownHall}")
+    public TownHall getTownHall(/*@CurrentUser UserPrincipal currentUser*/@PathVariable long idTownHall) {
+
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        return townHallRepository.findDistinctByIdTownHall(idTownHall);
     }
 }

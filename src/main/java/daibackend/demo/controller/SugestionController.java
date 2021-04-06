@@ -1,9 +1,6 @@
 package daibackend.demo.controller;
 
-import daibackend.demo.model.ActivityType;
-import daibackend.demo.model.Child;
-import daibackend.demo.model.Preference;
-import daibackend.demo.model.Sugestion;
+import daibackend.demo.model.*;
 import daibackend.demo.model.custom.CreateSugestion;
 import daibackend.demo.model.custom.updateEmail;
 import daibackend.demo.model.custom.updateInt;
@@ -99,7 +96,7 @@ public class SugestionController {
     }
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
     @PutMapping("/sugestions/{idSugestion}")
-    public ResponseEntity<ApiResponse> updateSugestion(@PathVariable (value="idInstitution")long idSugestion) {
+    public ResponseEntity<ApiResponse> updateSugestion(@PathVariable (value="idSugestion")long idSugestion) {
         try {
             if(sugestionRepository.findDistinctByIdSugestion(idSugestion).equals(null)){
                 return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
@@ -122,5 +119,13 @@ public class SugestionController {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
+    }
+    @DeleteMapping("sugestions/{idSugestion}")
+    public ResponseEntity<ApiResponse> deleteSugestion(@PathVariable (value="idSugestion")long idSugestion) {
+        Sugestion sugestion = sugestionRepository.findDistinctByIdSugestion(idSugestion);
+        sugestionRepository.delete(sugestion);
+        return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Sugestion deleted.", sugestion.getIdSugestion()),
+                HttpStatus.CREATED);
+
     }
 }
