@@ -1,15 +1,15 @@
 package daibackend.demo.model.custom;
 
-public class DataActivityType {
+public class DataActivityTypeDashboard {
     private int quantity;
     private int inscriptions;
     private int presences;
     private float feedback;
 
-    public DataActivityType() {
+    public DataActivityTypeDashboard() {
     }
 
-    public DataActivityType(int quantity, int inscriptions, int presences, float feedback) {
+    public DataActivityTypeDashboard(int quantity, int inscriptions, int presences, float feedback) {
         this.quantity = quantity;
         this.inscriptions = inscriptions;
         this.presences = presences;

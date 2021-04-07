@@ -3,12 +3,14 @@ package daibackend.demo.controller;
 import daibackend.demo.model.ActivityType;
 import daibackend.demo.model.Child;
 import daibackend.demo.model.Preference;
+import daibackend.demo.model.custom.DataPreferenceDashboard;
 import daibackend.demo.model.custom.PreferenceActivitiesByChild;
 import daibackend.demo.payload.response.ApiResponse;
 import daibackend.demo.repository.ActivityTypeRepository;
 import daibackend.demo.repository.ChildRepository;
 import daibackend.demo.repository.PreferenceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -112,5 +114,19 @@ public class PreferenceController {
         return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Preference deleted.", preference.getIdPreference()),
                 HttpStatus.CREATED);
 
+    }
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/preferences/dashboard")
+    public List<DataPreferenceDashboard> listPreferenceDashboard(/*@CurrentUser UserPrincipal currentUser*/ ) {
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        return preferenceRepository.findQuantity(PageRequest.of(0,3));
     }
 }
