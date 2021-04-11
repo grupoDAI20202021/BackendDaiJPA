@@ -1,6 +1,7 @@
 package daibackend.demo.repository;
 
 import daibackend.demo.model.Institution;
+import daibackend.demo.model.Login;
 import daibackend.demo.model.custom.InstitutionList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -11,6 +12,8 @@ import java.util.List;
 
 public interface InstitutionRepository extends JpaRepository<Institution, Long> {
     Institution findDistinctByIdInstitution(long id_institution);
+
+    Institution findDistinctByLogin(Login login);
 
     @Query(value = "SELECT new daibackend.demo.model.custom.InstitutionList(L.email,T.name,T.address,T.idInstitution) FROM login L, institution T where L.idLogin= T.login.idLogin" )
     List<InstitutionList> findAllInstitution();

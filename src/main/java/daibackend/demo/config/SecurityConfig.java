@@ -30,12 +30,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
-    }
+    @Autowired
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
@@ -64,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll().antMatchers(HttpMethod.GET).permitAll().anyRequest().authenticated();
 
         // Add our custom JWT security filter
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 }

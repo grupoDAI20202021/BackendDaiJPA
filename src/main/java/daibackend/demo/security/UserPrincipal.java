@@ -6,9 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class UserPrincipal implements UserDetails {
@@ -20,28 +18,41 @@ public class UserPrincipal implements UserDetails {
     //private String name;
 
     @JsonIgnore
-    private String email;
+    private final String email;
 
     @JsonIgnore
-    private String password;
+    private final String password;
 
-    private GrantedAuthority authorities;
+    private final boolean isAccountNonExpired;
+    private final boolean isAccountNonLocked;
+    private final boolean isCredentialNonExpired;
+    private final boolean isEnabled;
+
+    private final Collection<? extends GrantedAuthority> grantedAuthorities;
+   // private GrantedAuthority authorities;
 
     public UserPrincipal(Long id,/* String name,*/ String email, String password,
-                         GrantedAuthority authorities) {
+                         /*GrantedAuthority authorities*/ boolean isAccountNonExpired, boolean isAccountNonLocked, boolean isCredentialNonExpired, boolean isEnabled, Collection<? extends GrantedAuthority> grantedAuthorities) {
         this.id = id;
         //this.name = name;
         this.email = email;
         this.password = password;
-        this.authorities = authorities;
+        this.isAccountNonExpired = isAccountNonExpired;
+        this.isAccountNonLocked = isAccountNonLocked;
+        this.isCredentialNonExpired = isCredentialNonExpired;
+        this.isEnabled = isEnabled;
+        this.grantedAuthorities = grantedAuthorities;
+        //this.authorities = authorities;
     }
 
-    public static UserPrincipal create(Login user) {
-        GrantedAuthority authorities = (GrantedAuthority) user.getRole();
-               // .map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
+   public static UserPrincipal create(long id,String email, String password, String roles) {
+       Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+       grantedAuthorities.add(new SimpleGrantedAuthority(roles));
+       List <GrantedAuthority> authorities = grantedAuthorities.stream()
+               .map(role -> new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toList());
 
-        return new UserPrincipal(user.getIdLogin(),/* user.getName(),*/ user.getEmail(), user.getPassword(), authorities);
-    }
+       return new UserPrincipal(id,/* user.getName(),*/ email, password, true, true, true, true, authorities);
+   }
 
     public Long getId() {
         return id;
@@ -62,27 +73,27 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return (Collection<? extends GrantedAuthority>) authorities;
+        return  grantedAuthorities;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return isAccountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isAccountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return isCredentialNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 
     @Override

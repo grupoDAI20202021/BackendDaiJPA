@@ -24,10 +24,11 @@ public class CookieUtils {
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
+        //cookie.setSecure(true);
         cookie.setHttpOnly(true);
-        //cookie.setDomain("backend-bracelhertz.herokuapp.com");
-        cookie.setDomain("127.0.0.1");
+        cookie.setDomain("localhost");
         cookie.setMaxAge(maxAge);
+        System.out.println(cookie);
         response.addCookie(cookie);
     }
 

@@ -11,6 +11,7 @@ import daibackend.demo.repository.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -26,7 +27,7 @@ public class ChildController {
     @Autowired
     LoginRepository loginRepository;
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('INSTITUTION') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
     @GetMapping("/children")
     public List<Child> listChildren(/*@CurrentUser UserPrincipal currentUser*/) {
         //User userLogged = userRepository.findByUserId(currentUser.getId());
