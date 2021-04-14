@@ -55,6 +55,20 @@ public class InstitutionController {
         return institutionRepository.findDistinctByIdInstitution(idInstitution);
     }
 
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/institutions/{idInstitution}/townhall")
+    public long findTownHallByIntitution(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idInstitution) {
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        return institutionRepository.getTownhallId(idInstitution);
+    }
+
     @PostMapping("/institutions") // Creat account
     public ResponseEntity<ApiResponse> saveInstitution(@RequestBody CreateInstitution institution) {
         try {

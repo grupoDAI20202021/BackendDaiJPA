@@ -15,7 +15,7 @@ public interface InstitutionRepository extends JpaRepository<Institution, Long> 
 
     Institution findDistinctByLogin(Login login);
 
-    @Query(value = "SELECT new daibackend.demo.model.custom.InstitutionList(L.email,T.name,T.address,T.idInstitution) FROM login L, institution T where L.idLogin= T.login.idLogin" )
+    @Query(value = "SELECT new daibackend.demo.model.custom.InstitutionList(L.email,T.name,T.address,T.townHall.name,T.idInstitution) FROM login L, institution T where L.idLogin= T.login.idLogin" )
     List<InstitutionList> findAllInstitution();
 
     @Transactional
@@ -25,4 +25,7 @@ public interface InstitutionRepository extends JpaRepository<Institution, Long> 
 
     @Override
     void delete(Institution institution);
+
+    @Query(value="SELECT T.townHall.idTownHall FROM  institution T where T.idInstitution=?1")
+    long getTownhallId(long idInstitution);
 }

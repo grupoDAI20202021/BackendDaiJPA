@@ -8,6 +8,8 @@ import daibackend.demo.model.custom.updatePassword;
 import daibackend.demo.payload.response.ApiResponse;
 import daibackend.demo.repository.ChildRepository;
 import daibackend.demo.repository.LoginRepository;
+import daibackend.demo.security.CurrentUser;
+import daibackend.demo.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +31,7 @@ public class ChildController {
 
     @PreAuthorize("hasRole('INSTITUTION') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
     @GetMapping("/children")
-    public List<Child> listChildren(/*@CurrentUser UserPrincipal currentUser*/) {
+    public List<Child> listChildren(@CurrentUser UserPrincipal currentUser) {
         //User userLogged = userRepository.findByUserId(currentUser.getId());
         //Set<Role> roleUserLogged = userLogged.getRoles();
 

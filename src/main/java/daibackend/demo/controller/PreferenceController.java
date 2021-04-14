@@ -79,7 +79,7 @@ public class PreferenceController {
     }*/
    // }
 
-    @PostMapping("/preferences/{idChild}/{idActivityType}") // Creat inscription
+    @PostMapping("/preferences/{idChild}/{idActivityType}") // Creat preference
     public ResponseEntity<ApiResponse> savePreference(@PathVariable long idChild, @PathVariable long idActivityType) {
         try {
             Child child = childRepository.findDistinctByIdChild(idChild);

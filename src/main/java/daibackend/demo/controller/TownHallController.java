@@ -190,7 +190,6 @@ public class TownHallController {
 
     @DeleteMapping("/townhalls/{idTownHall}")
     public ResponseEntity<ApiResponse> deleteTownHall(@PathVariable (value="idTownHall")long idTownHall) {
-
        TownHall townHall = townHallRepository.findDistinctByIdTownHall(idTownHall);
         Login login = loginRepository.findDistinctByIdLogin(townHall.getLogin().getIdLogin());
         townHallRepository.delete(townHall);

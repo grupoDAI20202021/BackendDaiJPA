@@ -67,9 +67,8 @@ import java.util.logging.Logger;
 
 
         //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
-        @GetMapping("/activities/by-townhall/{idTownHall}/{status}")
-        public List<Activity> listActivitiesTownHall(@PathVariable(value = "idTownHall") long idTownHall, @PathVariable String status) {
-        TownHall t = townHallRepository.findDistinctByIdTownHall(idTownHall);
+        @GetMapping("/activities/{idInstitution}/status")
+        public List<ActivitiesList> listActivitiesTownHallPorAvaliar(@PathVariable(value = "idInstitution") long idInstitution) {
 
             //User userLogged = userRepository.findByUserId(currentUser.getId());
             //Set<Role> roleUserLogged = userLogged.getRoles();
@@ -79,8 +78,24 @@ import java.util.logging.Logger;
                 || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
             return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
         }*/
-            return activityRepository.findActivitiesByStatusAndTownHall(status,t);
+            return activityRepository.findActivitiesByStatus("Por avaliar",idInstitution);
         }
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/activities/by-townhall/{idTownHall}")
+    public List<Activity> listActivitiesTownHall(@PathVariable(value = "idTownHall") long idTownHall) {
+        TownHall t = townHallRepository.findDistinctByIdTownHall(idTownHall);
+
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        return activityRepository.findActivitiesTownHall(idTownHall);
+    }
 
 
         @PostMapping("/activities")

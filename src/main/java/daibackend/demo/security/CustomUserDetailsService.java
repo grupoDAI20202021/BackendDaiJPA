@@ -88,4 +88,30 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with id : " + idLogin);
         }
     }
+
+    @Transactional
+    public UserDetails loadUserByEmail(String email) {
+        try {
+            Login user = loginRepository.findDistinctByEmail(email);
+            if (user.getRole().getIdRole()==0){
+                Administrator administrator = administratorRepository.findDistinctByLogin(user);
+                return UserPrincipal.create(administrator.getIdAdministrator(),user.getEmail(), user.getPassword(), user.getRole().getName().name());
+            }
+
+            if (user.getRole().getIdRole()==1){
+                TownHall townHall = townHallRepository.findDistinctByLogin(user);
+                return UserPrincipal.create(townHall.getIdTownHall(),user.getEmail(), user.getPassword(), user.getRole().getName().name());
+            }
+
+            if (user.getRole().getIdRole()==2){
+                Institution institution = institutionRepository.findDistinctByLogin(user);
+                return  UserPrincipal.create(institution.getIdInstitution(),user.getEmail(), user.getPassword(), user.getRole().getName().name());
+            } else {
+                Child child = childRepository.findDistinctByLogin(user);
+                return UserPrincipal.create(child.getIdChild(),user.getEmail(), user.getPassword(), user.getRole().getName().name());
+            }
+        } catch (Exception e) {
+            throw new UsernameNotFoundException("User not found with email : " + email);
+        }
+    }
 }

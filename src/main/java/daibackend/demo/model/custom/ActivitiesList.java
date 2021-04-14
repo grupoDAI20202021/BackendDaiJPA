@@ -6,27 +6,29 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
-public class ActivityList {
+public class ActivitiesList {
     private String title;
+    private String address;
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date init_data;
     @Temporal(TemporalType.DATE)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date end_data;
-    private String status;
+    private String sponsorName;
     private String activityType;
     private long idActivity;
 
-    public ActivityList() {
+    public ActivitiesList() {
     }
 
-    public ActivityList(String title, Date init_data, Date end_data, String status, String activityType, long idActivity) {
+    public ActivitiesList(String title, String address, Date init_data, Date end_data, String sponsorName, String activityType,long idActivity) {
         this.title = title;
+        this.address = address;
         this.init_data = init_data;
         this.end_data = end_data;
-        this.status = status;
-        this.activityType = activityType;
+        this.sponsorName = sponsorName;
+        this.activityType=activityType;
         this.idActivity = idActivity;
     }
 
@@ -36,6 +38,14 @@ public class ActivityList {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public Date getInit_data() {
@@ -54,20 +64,12 @@ public class ActivityList {
         this.end_data = end_data;
     }
 
-    public String getStatus() {
-        return status;
+    public String getSponsorName() {
+        return sponsorName;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getActivityType() {
-        return activityType;
-    }
-
-    public void setActivityType(String activityType) {
-        this.activityType = activityType;
+    public void setSponsorName(String sponsorName) {
+        this.sponsorName = sponsorName;
     }
 
     public long getIdActivity() {
@@ -76,5 +78,13 @@ public class ActivityList {
 
     public void setIdActivity(long idActivity) {
         this.idActivity = idActivity;
+    }
+
+    public String getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(String activityType) {
+        this.activityType = activityType;
     }
 }

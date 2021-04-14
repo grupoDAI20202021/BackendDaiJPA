@@ -6,6 +6,7 @@ import daibackend.demo.model.Institution;
 
 import daibackend.demo.model.Sponsor;
 import daibackend.demo.model.TownHall;
+import daibackend.demo.model.custom.ActivitiesList;
 import daibackend.demo.model.custom.ActivityList;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,13 +32,15 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     @Query(value="Select new daibackend.demo.model.custom.ActivityList(A.title,A.init_data,A.end_data,A.status,A.activityType.name,A.idActivity) From activity A, activity_Type AT where A.activityType.idActivityType=AT.idActivityType order by A.idActivity  asc ")
     List<ActivityList> findLast8(PageRequest pageable);
 
-    List<Activity> findByStatusAndInstitution(String status, Institution institution);
 
-     @Query("SELECT A FROM activity A WHERE A.status = ?1 and A.institution.idInstitution=?2 ORDER BY A.idActivity DESC")
-    List<Activity> findActivitiesByStatus(String status, Institution institution);
+     @Query("SELECT  new daibackend.demo.model.custom.ActivitiesList(A.title,A.address, A.init_data,A.end_data,S.name,A.activityType.name,A.idActivity) FROM activity A,sponsor S WHERE A.status = ?1 and A.institution.idInstitution=?2 and A.sponsor.idSponsor=S.idSponsor ORDER BY A.idActivity DESC")
+    List<ActivitiesList> findActivitiesByStatus(String status, long idInstitution);
 
     @Query("SELECT A FROM activity A,townHall T WHERE A.status = ?1 and T.idTownHall=?2 and A.institution.townHall.idTownHall= T.idTownHall ORDER BY A.idActivity DESC")
-    List<Activity> findActivitiesByStatusAndTownHall(String status, TownHall townHall);
+    List<Activity> findActivitiesByStatusAndTownHall(String status, long townhall);
+
+    @Query("SELECT A FROM activity A,townHall T WHERE T.idTownHall=?1 and A.institution.townHall.idTownHall= T.idTownHall ORDER BY A.idActivity DESC")
+    List<Activity> findActivitiesTownHall( long townhall);
 
     @Transactional
     @Modifying

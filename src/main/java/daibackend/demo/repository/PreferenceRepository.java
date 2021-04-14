@@ -18,7 +18,7 @@ public interface PreferenceRepository extends JpaRepository<Preference, Long> {
 
     List<Preference> findAllByChild(Child child);
 
-    @Query("SELECT new daibackend.demo.model.custom.PreferenceActivitiesByChild(A.idActivity,AT.name,A.title,A.init_data,A.end_data,A.address) FROM activity_Type AT, activity A, child C,preference P where A.activityType.idActivityType= AT.idActivityType and  P.activityType.idActivityType=A.activityType.idActivityType and C.idChild=?1 and A.status=?2 and AT.idActivityType=A.activityType.idActivityType")
+    @Query("SELECT new daibackend.demo.model.custom.PreferenceActivitiesByChild(A.idActivity,AT.name,A.title,A.init_data,A.end_data,A.address) FROM activity_Type AT, activity A, child C,preference P where A.activityType.idActivityType= AT.idActivityType and  P.activityType.idActivityType=A.activityType.idActivityType and C.idChild=?1 and A.status=?2 and AT.idActivityType=A.activityType.idActivityType order by A.init_data asc")
     List<PreferenceActivitiesByChild> findAllPreferenceActivitiesByChild(long idChild,String status);
 
     void deleteDistinctByActivityTypeAndChild(ActivityType activityType,Child child);

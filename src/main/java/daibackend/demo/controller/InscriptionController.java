@@ -122,11 +122,11 @@ public class InscriptionController {
                             HttpStatus.BAD_REQUEST);
                 }
 
-                if(update.getInt()!=1&&update.getInt()!=0){
+                if(update.getInt()!=1 && update.getInt()!=0){
                     return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Presence invalid."),
                             HttpStatus.BAD_REQUEST);
                 }
-
+                System.out.println(update);
                 inscriptionRepository.updatePresence(update.getInt(),idChild,idActivity);
 
                 return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Presence updated.", idChild),
