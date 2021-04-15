@@ -43,6 +43,21 @@ public class InscriptionController {
     }
 
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/children/{idChild}/currentactivities")
+    public List<InscriptionActivitiesByChildList> listCurrentActivitiesByChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        Child child = childRepository.findDistinctByIdChild(idChild);
+        return inscriptionRepository.findAllByCurrentActivityChild(idChild,"Aprovada");
+    }
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
     @GetMapping("/activities/{idActivity}/children")
     public List<InscriptionChildrenByActivityList> listChildrenByActivity(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idActivity) {
         //User userLogged = userRepository.findByUserId(currentUser.getId());

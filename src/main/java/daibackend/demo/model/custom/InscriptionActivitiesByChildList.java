@@ -7,6 +7,8 @@ public class InscriptionActivitiesByChildList {
     @Id
     private long idActivity;
 
+    private Date init_data;
+
     private Date end_data;
 
     private int evaluation;
@@ -18,12 +20,29 @@ public class InscriptionActivitiesByChildList {
     public InscriptionActivitiesByChildList() {
     }
 
-    public InscriptionActivitiesByChildList(long idActivity, Date end_data, int evaluation, String title, String name) {
+    public InscriptionActivitiesByChildList(long idActivity, Date init_data, Date end_data, int evaluation, String title, String name) {
         this.idActivity = idActivity;
+        this.init_data = init_data;
         this.end_data = end_data;
         this.evaluation = evaluation;
         this.title = title;
         this.name = name;
+    }
+
+    public Date getInit_data() {
+        return init_data;
+    }
+
+    public void setInit_data(Date init_data) {
+        this.init_data = init_data;
+    }
+
+    public Date getEnd_data() {
+        return end_data;
+    }
+
+    public void setEnd_data(Date end_data) {
+        this.end_data = end_data;
     }
 
     public long getIdActivity() {
