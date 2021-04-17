@@ -1,16 +1,15 @@
 package daibackend.demo.controller;
 
-
-import daibackend.demo.model.Activity;
 import daibackend.demo.model.Child;
-import daibackend.demo.model.Institution;
+import daibackend.demo.model.Comment;
 import daibackend.demo.model.Post;
 import daibackend.demo.model.custom.CreatePost;
+import daibackend.demo.model.custom.InstitutionList;
 import daibackend.demo.model.custom.updateActivityTownHall;
 import daibackend.demo.model.custom.updateEmail;
 import daibackend.demo.payload.response.ApiResponse;
 import daibackend.demo.repository.ChildRepository;
-import daibackend.demo.repository.InstitutionRepository;
+import daibackend.demo.repository.CommentRepository;
 import daibackend.demo.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api")
-public class PostController {
+public class CommentController {
+
+    @Autowired
+    CommentRepository commentRepository;
 
     @Autowired
     PostRepository postRepository;
@@ -31,8 +33,8 @@ public class PostController {
     ChildRepository childRepository;
 
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
-    @GetMapping("/posts")
-    public List<Post> listPosts(/*@CurrentUser UserPrincipal currentUser*/) {
+    @GetMapping("/posts/{idPost}/comments")
+    public List<Comment> listComments(/*@CurrentUser UserPrincipal currentUser*/@PathVariable long idPost) {
         //User userLogged = userRepository.findByUserId(currentUser.getId());
         //Set<Role> roleUserLogged = userLogged.getRoles();
 
@@ -41,22 +43,23 @@ public class PostController {
                 || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
             return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
         }*/
-        return postRepository.findAll();
+        Post post = postRepository.findDistinctByIdPost(idPost);
+        return commentRepository.findAllByPost(post);
     }
 
-    @PostMapping("/posts")
-    public ResponseEntity<ApiResponse> savePost(@RequestBody CreatePost post) {
+    @PostMapping("/posts/{idPost}/comments")
+    public ResponseEntity<ApiResponse> saveComment(@PathVariable long idPost ,@RequestBody CreatePost comment) {
         try {
             // Activity Attributes
-
-            Long idChild = post.getIdChild();
+            Post post= postRepository.findDistinctByIdPost(idPost);
+            Long idChild = comment.getIdChild();
             Date insert_date = new Date();
             String content= post.getPost();
             Child child = childRepository.findDistinctByIdChild(idChild);
-            Post newPost = new Post(null,insert_date,child,content);
-                postRepository.save(newPost);
-                return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Activity created", newPost.getIdPost()),
-                        HttpStatus.CREATED);
+            Comment newComment = new Comment(null,insert_date,child,post,content);
+            commentRepository.save(newComment);
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Comment created", newComment.getIdComment()),
+                    HttpStatus.CREATED);
 
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
@@ -65,15 +68,16 @@ public class PostController {
     }
 
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Se calhar tirar
-    @PutMapping("/posts/{idPost}")
-    public ResponseEntity<ApiResponse> updatePost(@PathVariable(value="idPost")long idPost, @RequestBody updateEmail update) {
+    @PutMapping("/comments/{idComment}")
+    public ResponseEntity<ApiResponse> updateComment(@PathVariable(value="idComment")long idComment, @RequestBody updateEmail update) {
         try {
-            if (postRepository.findDistinctByIdPost(idPost).equals(null)) {
+            if (commentRepository.findDistinctByIdComment(idComment).equals(null)) {
                 return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                         HttpStatus.BAD_REQUEST);
             }
-            postRepository.updatePost(update.getEmail(),idPost);
-            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Post updated.", idPost),
+
+            commentRepository.updateComment(update.getEmail(),idComment);
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Comment updated.", idComment),
                     HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,12 +85,12 @@ public class PostController {
         return null;
     }
 
-    @DeleteMapping("/posts/{idPost}")
-    public ResponseEntity<ApiResponse> deletePost(@PathVariable (value="idPost")long idPost) {
+    @DeleteMapping("/comments/{idComment}")
+    public ResponseEntity<ApiResponse> deleteComment(@PathVariable (value="idComment")long idComment) {
         try {
-            Post post = postRepository.findDistinctByIdPost(idPost);
-            postRepository.deleteDistinctByIdPost(idPost);
-            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Post deleted.", idPost),
+            Comment comment = commentRepository.findDistinctByIdComment(idComment);
+            commentRepository.delete(comment);
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Comment deleted.", idComment),
                     HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
