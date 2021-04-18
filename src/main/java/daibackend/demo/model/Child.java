@@ -5,6 +5,7 @@ import daibackend.demo.util.ConstantUtils;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Entity(name = "child")
 @Table(name = "child")
@@ -28,15 +29,24 @@ public class Child {
     @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces")
     private String address;
 
+    @NotBlank(message = "Can't be blank")
+    @Size(max = 9, min = 9, message = "Must contain exacly 9 numbers")
+    @Pattern(regexp = ConstantUtils.CODE_PATTERN, message = "Can only contain numbers")
+    private String contact;
+
+    private long idAvatar;
+
     public Child() {
     }
 
-    public Child(Long idChild, Login login, String name, int age,String address) {
+    public Child(Long idChild, Login login, String name, int age,String address,String contact,long idAvatar) {
         this.idChild = idChild;
         this.login = login;
         this.name = name;
         this.age = age;
         this.address=address;
+        this.contact=contact;
+        this.idAvatar=idAvatar;
     }
 
     public Long getIdChild() {
@@ -77,5 +87,21 @@ public class Child {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
+
+    public long getIdAvatar() {
+        return idAvatar;
+    }
+
+    public void setIdAvatar(long idAvatar) {
+        this.idAvatar = idAvatar;
     }
 }

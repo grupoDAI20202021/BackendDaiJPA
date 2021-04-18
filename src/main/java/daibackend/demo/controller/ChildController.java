@@ -4,6 +4,7 @@ import daibackend.demo.model.*;
 import daibackend.demo.model.custom.CreateChild;
 
 import daibackend.demo.model.custom.updateEmail;
+import daibackend.demo.model.custom.updateInt;
 import daibackend.demo.model.custom.updatePassword;
 import daibackend.demo.payload.response.ApiResponse;
 import daibackend.demo.repository.ChildRepository;
@@ -60,7 +61,8 @@ public class ChildController {
     public ResponseEntity<ApiResponse> saveChild(@RequestBody CreateChild child) {
         try {
             // Activity Attributes
-
+            long idAvatar=child.getIdAvatar();
+            String contact = child.getContact();
             String email  = child.getEmail();
             String password  = child.getPassword();
             String confirmPassword = child.getConfirmPassword();
@@ -94,7 +96,7 @@ public class ChildController {
                 loginRepository.save(l);
 
                 // Create Child
-                Child newChild = new Child(null,l,name,age,address);
+                Child newChild = new Child(null,l,name,age,address,contact,idAvatar);
                 childRepository.save(newChild);
 
                 return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created",loginRepository.findDistinctByEmail(email).getIdLogin()),
@@ -178,6 +180,36 @@ public class ChildController {
             loginRepository.updateLoginEmail(email,idLogin);
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Email updated.", idChild),
+                    HttpStatus.CREATED);
+            //User userLogged = userRepository.findByUserId(currentUser.getId());
+            //Set<Role> roleUserLogged = userLogged.getRoles();
+
+            // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        } catch (Exception e) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PutMapping("/children/{idChild}/avatar")
+    public ResponseEntity<ApiResponse> updateChildAvatar(@PathVariable (value="idChild")long idChild, @RequestBody updateInt Int) {
+        try {
+            if(childRepository.findDistinctByIdChild(idChild).equals(null)){
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                        HttpStatus.BAD_REQUEST);
+            }
+
+            long idAvatar = Int.getInt();
+
+
+            childRepository.updateChildAvatar(idAvatar,idChild);
+
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Avatar updated.", idChild),
                     HttpStatus.CREATED);
             //User userLogged = userRepository.findByUserId(currentUser.getId());
             //Set<Role> roleUserLogged = userLogged.getRoles();
