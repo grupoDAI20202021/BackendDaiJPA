@@ -21,11 +21,11 @@ public interface InscriptionRepository extends JpaRepository<Inscription, Inscri
 
     Inscription findDistinctByActivityAndChild(Activity activity, Child child);
 
-    @Query(value = "SELECT new daibackend.demo.model.custom.InscriptionActivitiesByChildList(A.idActivity,A.init_data,A.end_data, I.evaluation, A.title, AT.name) FROM activity_Type AT,inscription I, activity A, child C  where A.idActivity= I.activity.idActivity and C.idChild=?1  and C.idChild=I.child.idChild and I.presence=?2 and AT.idActivityType=A.activityType.idActivityType" )
+    @Query(value = "SELECT new daibackend.demo.model.custom.InscriptionActivitiesByChildList(A.idActivity,A.init_data,A.end_data, I.evaluation, A.title, AT.name,A.address) FROM activity_Type AT,inscription I, activity A, child C  where A.idActivity= I.activity.idActivity and C.idChild=?1  and C.idChild=I.child.idChild and I.presence=?2 and AT.idActivityType=A.activityType.idActivityType" )
     List<InscriptionActivitiesByChildList>  findAllByActivityChild(long idChild,int presence);
 
 
-    @Query(value = "SELECT new daibackend.demo.model.custom.InscriptionActivitiesByChildList(A.idActivity,A.init_data,A.end_data, I.evaluation, A.title, AT.name) FROM activity_Type AT,inscription I, activity A, child C  where A.idActivity= I.activity.idActivity and C.idChild=?1 and C.idChild=I.child.idChild and A.status=?2 and AT.idActivityType=A.activityType.idActivityType" )
+    @Query(value = "SELECT new daibackend.demo.model.custom.InscriptionActivitiesByChildList(A.idActivity,A.init_data,A.end_data, I.evaluation, A.title, AT.name,A.address) FROM activity_Type AT,inscription I, activity A, child C  where A.idActivity= I.activity.idActivity and C.idChild=?1 and C.idChild=I.child.idChild and A.status=?2 and AT.idActivityType=A.activityType.idActivityType" )
     List<InscriptionActivitiesByChildList>  findAllByCurrentActivityChild(long idChild,String status);
 
 
