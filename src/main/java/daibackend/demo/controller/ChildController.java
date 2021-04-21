@@ -93,10 +93,10 @@ public class ChildController {
             String hashedPassword = passwordEncoder.encode(password);
                 // Create Login
                 Login l = new Login(null,email,hashedPassword,role);
+            Child newChild = new Child(null,l,name,age,address,contact,idAvatar);
                 loginRepository.save(l);
 
                 // Create Child
-                Child newChild = new Child(null,l,name,age,address,contact,idAvatar);
                 childRepository.save(newChild);
 
                 return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created",loginRepository.findDistinctByEmail(email).getIdLogin()),

@@ -12,4 +12,7 @@ import java.util.List;
 public interface AdministratorRepository extends JpaRepository<Administrator, Long> {
 
     Administrator findDistinctByLogin(Login login);
+
+    @Query(value = "SELECT A.name FROM administrator A where A.login.email=?1" )
+    String findDistinctByEmail(String email);
 }

@@ -55,10 +55,11 @@ public class PostController {
             Child child = childRepository.findDistinctByIdChild(idChild);
             Post newPost = new Post(null,insert_date,child,content);
                 postRepository.save(newPost);
-                return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Activity created", newPost.getIdPost()),
+                return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Post created", newPost.getIdPost()),
                         HttpStatus.CREATED);
 
         } catch (Exception e) {
+            System.out.println(e);
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }

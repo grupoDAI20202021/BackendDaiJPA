@@ -14,6 +14,7 @@ import java.util.Date;
 @Table(name = "post")
 public class Post {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPost;
 
     @Temporal(TemporalType.DATE)
