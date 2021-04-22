@@ -65,4 +65,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 
     @Override
     void delete(Activity activity);
+
+
+    @Query("SELECT  Count(A) FROM activity A,activity_Type AT WHERE A.activityType.idActivityType=AT.idActivityType  and A.status = ?1 and A.activityType.idActivityType=?2  ORDER BY A.idActivity DESC")
+    int findActivitiesByStatusNumber(String status,long idActivityType);
 }

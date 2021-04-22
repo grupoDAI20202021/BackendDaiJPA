@@ -97,6 +97,19 @@ import java.util.logging.Logger;
         return activityRepository.findActivitiesTownHall(idTownHall);
     }
 
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/activities/current/{idActivityType}")
+    public int listCurrentActivitiesTotal(/*@CurrentUser UserPrincipal currentUser*/@PathVariable long idActivityType) {
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        return activityRepository.findActivitiesByStatusNumber("Aprovada", idActivityType);
+    }
 
         @PostMapping("/activities")
         public ResponseEntity<ApiResponse> saveActivity(@RequestBody Activity activity) {

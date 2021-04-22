@@ -74,7 +74,6 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
         CookieUtils.addCookie(response, "token", jwt, 604800000);
-        CookieUtils.addCookie(response,"role",roleString,604800000);
         if (user.getRole().getIdRole()==0){
             Administrator administrator = administratorRepository.findDistinctByLogin(user);
             return ResponseEntity.ok(new JwtAuthenticationResponseRole(jwt, roleString, administrator.getIdAdministrator()));

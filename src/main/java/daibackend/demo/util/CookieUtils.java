@@ -26,7 +26,7 @@ public class CookieUtils {
         cookie.setPath("/");
         //cookie.setSecure(true);
         cookie.setHttpOnly(true);
-        cookie.setDomain("localhost");
+        cookie.setDomain("127.0.0.1");
         cookie.setMaxAge(maxAge);
         System.out.println(cookie);
         response.addCookie(cookie);
@@ -39,6 +39,7 @@ public class CookieUtils {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(name)) {
                     System.out.println(cookie.getName());
+
                     cookie.setValue("");
                     cookie.setPath("/");
                     cookie.setMaxAge(0);
