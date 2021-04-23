@@ -16,29 +16,20 @@ import java.util.Date;
 
 public class CreateActivity {
 
-    private Institution institution;
-
-    private ActivityType activityType;
-
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "Can't be null")
     private Date init_data;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "Can't be null")
     private Date end_data;
 
     @NotBlank(message = "Can't be blank")
-    @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces")
-    private String status;
-
-    @NotBlank(message = "Can't be blank")
     @Pattern(regexp = ConstantUtils.ADDRESS_PATTERN, message = "Can only letters, letters with special characters, numbers and special characters (\",\", \"º\", \" \")")
     private String address;
 
-    private int evaluation;
 
     private int spaces;
 
@@ -46,32 +37,18 @@ public class CreateActivity {
     @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces")
     private String title;
 
-    public CreateActivity(Institution institution, ActivityType activityType, Date init_data,  Date end_data, String status, String address, int evaluation, int spaces,  String title) {
-        this.institution = institution;
-        this.activityType = activityType;
+    private long idInstitution;
+
+    private long idActivityType;
+
+    public CreateActivity(@NotNull(message = "Can't be null") Date init_data, @NotNull(message = "Can't be null") Date end_data, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.ADDRESS_PATTERN, message = "Can only letters, letters with special characters, numbers and special characters (\",\", \"º\", \" \")") String address, int spaces, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces") String title, long idInstitution, long idActivityType) {
         this.init_data = init_data;
         this.end_data = end_data;
-        this.status = status;
         this.address = address;
-        this.evaluation = evaluation;
         this.spaces = spaces;
         this.title = title;
-    }
-
-    public Institution getInstitution() {
-        return institution;
-    }
-
-    public void setInstitution(Institution institution) {
-        this.institution = institution;
-    }
-
-    public ActivityType getActivityType() {
-        return activityType;
-    }
-
-    public void setActivityType(ActivityType activityType) {
-        this.activityType = activityType;
+        this.idInstitution = idInstitution;
+        this.idActivityType = idActivityType;
     }
 
     public Date getInit_data() {
@@ -90,28 +67,12 @@ public class CreateActivity {
         this.end_data = end_data;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getAddress() {
         return address;
     }
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public int getEvaluation() {
-        return evaluation;
-    }
-
-    public void setEvaluation(int evaluation) {
-        this.evaluation = evaluation;
     }
 
     public int getSpaces() {
@@ -128,5 +89,21 @@ public class CreateActivity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public long getIdInstitution() {
+        return idInstitution;
+    }
+
+    public void setIdInstitution(long idInstitution) {
+        this.idInstitution = idInstitution;
+    }
+
+    public long getIdActivityType() {
+        return idActivityType;
+    }
+
+    public void setIdActivityType(long idActivityType) {
+        this.idActivityType = idActivityType;
     }
 }

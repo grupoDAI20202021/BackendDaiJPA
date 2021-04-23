@@ -5,16 +5,18 @@ public class RankList {
     private String name;
     private int age;
     private long points;
+    private long idAvatar;
 
     public RankList() {
 
     }
 
-    public RankList(long idChild, String name, int age, long points) {
+    public RankList(long idChild, String name, int age, long points,long idAvatar) {
         this.idChild = idChild;
         this.name = name;
         this.age = age;
         this.points = points;
+        this.idAvatar=idAvatar;
     }
 
     public long getIdChild() {
@@ -47,5 +49,13 @@ public class RankList {
 
     public void setPoints(long points) {
         this.points = points;
+    }
+
+    public long getIdAvatar() {
+        return idAvatar;
+    }
+
+    public void setIdAvatar(long idAvatar) {
+        this.idAvatar = idAvatar;
     }
 }

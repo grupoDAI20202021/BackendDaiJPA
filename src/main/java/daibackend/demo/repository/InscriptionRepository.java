@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface InscriptionRepository extends JpaRepository<Inscription, InscriptionId> {
 
-    @Query(value ="Select new daibackend.demo.model.custom.RankList(C.idChild,C.name,C.age,Sum(I.evaluation)) from child C left join inscription I on C.idChild=I.child.idChild group by C.idChild order by SUM(I.evaluation) desc")
+    @Query(value ="Select new daibackend.demo.model.custom.RankList(C.idChild,C.name,C.age,Sum(I.evaluation),C.idAvatar) from child C left join inscription I on C.idChild=I.child.idChild group by C.idChild order by SUM(I.evaluation) desc")
     List <RankList> findRankByPoints();
 
     Inscription findDistinctByActivityAndChild(Activity activity, Child child);

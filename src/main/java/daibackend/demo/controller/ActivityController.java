@@ -1,14 +1,9 @@
 package daibackend.demo.controller;
 
-import daibackend.demo.model.Activity;
-import daibackend.demo.model.Institution;
-import daibackend.demo.model.Sponsor;
-import daibackend.demo.model.TownHall;
+import daibackend.demo.model.*;
 import daibackend.demo.model.custom.*;
 import daibackend.demo.payload.response.ApiResponse;
-import daibackend.demo.repository.ActivityRepository;
-import daibackend.demo.repository.SponsorRepository;
-import daibackend.demo.repository.TownHallRepository;
+import daibackend.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -31,6 +26,12 @@ import java.util.logging.Logger;
 
         @Autowired
         TownHallRepository townHallRepository;
+
+    @Autowired
+    InstitutionRepository institutionRepository;
+
+    @Autowired
+    ActivityTypeRepository activityTypeRepository;
 
         @Autowired
         SponsorRepository sponsorRepository;
@@ -112,23 +113,29 @@ import java.util.logging.Logger;
     }
 
         @PostMapping("/activities")
-        public ResponseEntity<ApiResponse> saveActivity(@RequestBody Activity activity) {
+        public ResponseEntity<ApiResponse> saveActivity(@RequestBody CreateActivity activity) {
             try {
                 // Activity Attributes
 
-                Long idActivity = activity.getIdActivity();
+
                 Date init_data  = activity.getInit_data();
                 Date end_data  = activity.getEnd_data();
                 String title = activity.getTitle();
                 String status = "Por aprovar";
+                String address = activity.getAddress();
                 int spaces = activity.getSpaces();
-                Institution institution = activity.getInstitution();
+                Institution institution = institutionRepository.findDistinctByIdInstitution(activity.getIdInstitution());
+                System.out.println(institution);
+                ActivityType activityType = activityTypeRepository.findDistinctByIdActivityType(activity.getIdActivityType());
+
+
                 if (init_data.compareTo(end_data) >0 || ! status.equals("Por aprovar")) {
                     return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                             HttpStatus.BAD_REQUEST);
                 } else {
-                    activityRepository.save(activity);
-                    return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Activity created", idActivity),
+                    Activity Activity = new Activity(null,institution,activityType,null,status,init_data,end_data,address,title,0,spaces);
+                    activityRepository.save(Activity);
+                    return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Activity created", Activity.getIdActivity()),
                             HttpStatus.CREATED);
                 }
             } catch (Exception e) {
