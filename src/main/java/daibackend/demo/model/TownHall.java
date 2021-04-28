@@ -25,6 +25,8 @@ public class TownHall {
     @Pattern(regexp = ConstantUtils.ADDRESS_PATTERN, message = "Can only letters, letters with special characters, numbers and special characters (\",\", \"º\", \" \")")
     private String address;
 
+    private int active;
+
     public TownHall() {
     }
 
@@ -33,6 +35,7 @@ public class TownHall {
         this.login = login;
         this.name = name;
         this.address = address;
+        this.active=1;
     }
 
     public Long getIdTownHall() {
@@ -65,5 +68,13 @@ public class TownHall {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 }

@@ -37,7 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Let people login with or email
         try {
-            Login user = loginRepository.findDistinctByEmail(email);
+            Login user = loginRepository.findDistinctByEmailAndActive(email,1);
 
             if (user.getRole().getIdRole()==0){
                 Administrator administrator = administratorRepository.findDistinctByLogin(user);
@@ -92,7 +92,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByEmail(String email) {
         try {
-            Login user = loginRepository.findDistinctByEmail(email);
+            Login user = loginRepository.findDistinctByEmailAndActive(email,1);
             if (user.getRole().getIdRole()==0){
                 Administrator administrator = administratorRepository.findDistinctByLogin(user);
                 return UserPrincipal.create(administrator.getIdAdministrator(),user.getEmail(), user.getPassword(), user.getRole().getName().name());

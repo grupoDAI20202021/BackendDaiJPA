@@ -1,11 +1,8 @@
 package daibackend.demo.controller;
 
 import daibackend.demo.model.*;
-import daibackend.demo.model.custom.CreateChild;
+import daibackend.demo.model.custom.*;
 
-import daibackend.demo.model.custom.updateEmail;
-import daibackend.demo.model.custom.updateInt;
-import daibackend.demo.model.custom.updatePassword;
 import daibackend.demo.payload.response.ApiResponse;
 import daibackend.demo.repository.ChildRepository;
 import daibackend.demo.repository.LoginRepository;
@@ -20,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -92,21 +90,40 @@ public class ChildController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPassword = passwordEncoder.encode(password);
                 // Create Login
-                Login l = new Login(null,email,hashedPassword,role);
-            Child newChild = new Child(null,l,name,age,address,contact,idAvatar);
-                loginRepository.save(l);
 
-                // Create Child
-                childRepository.save(newChild);
+                if(age >= 13) {
+                    Login l = new Login(null,email,hashedPassword,role,1);
+                    Child newChild = new Child(null, l, name, age, address, contact, idAvatar);
+                    loginRepository.save(l);
 
-                return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created",loginRepository.findDistinctByEmail(email).getIdLogin()),
-                        HttpStatus.CREATED);
+                    // Create Child
+                    childRepository.save(newChild);
+
+                    return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created", newChild.getIdChild()),
+                            HttpStatus.CREATED);
+                }else {
+
+                    String parentEmail= child.getParent_email();
+                    Random rnd = new Random();
+                    int number = rnd.nextInt(900000)  + 100000;
+                    Login l = new Login(null,email,hashedPassword,role,0,number);
+                    Child newChild = new Child(null, l, name, age, address, contact, idAvatar,parentEmail);
+                    loginRepository.save(l);
+                    // Create Child
+                    childRepository.save(newChild);
+                    return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created", newChild.getIdChild()),
+                            HttpStatus.CREATED);
+                    // this will convert any number sequence into 6 character.
+                }
 
         } catch (Exception e) {
-            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, e.getMessage()),
                     HttpStatus.BAD_REQUEST);
         }
     }
+
+
+
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
     @PutMapping("/children/{idChild}/password")
     public ResponseEntity<ApiResponse> updateChildPassword(@PathVariable (value="idChild")long idChild, @RequestBody updatePassword update) {

@@ -15,8 +15,8 @@ public interface TownHallRepository extends JpaRepository<TownHall, Long> {
 
     TownHall findDistinctByLogin(Login login);
 
-    @Query(value = "SELECT new daibackend.demo.model.custom.TownHallList(L.email,T.name,T.address,T.idTownHall) FROM login L, townHall T where L.idLogin= T.login.idLogin" )
-    List<TownHallList> findAllTownHallList();
+    @Query(value = "SELECT new daibackend.demo.model.custom.TownHallList(L.email,T.name,T.address,T.idTownHall) FROM login L, townHall T where L.idLogin= T.login.idLogin and T.active=?1" )
+    List<TownHallList> findAllTownHallList(int active);
 
     @Override
     void delete(TownHall townHall);

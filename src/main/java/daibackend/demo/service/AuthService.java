@@ -67,7 +67,7 @@ public class AuthService {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
     try {
-    Login user = loginRepository.findDistinctByEmail(loginRequest.getEmail());
+    Login user = loginRepository.findDistinctByEmailAndActive(loginRequest.getEmail(),1);
 
         String roleString = "";
         roleString = user.getRole().getName().toString();

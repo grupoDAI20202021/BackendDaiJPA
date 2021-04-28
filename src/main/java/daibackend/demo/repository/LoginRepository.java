@@ -15,7 +15,7 @@ public interface LoginRepository extends JpaRepository<Login, Long> {
     @Override
     Optional<Login> findById(Long aLong);
 
-    Login findDistinctByEmail(String email);
+    Login findDistinctByEmailAndActive(String email,int active);
 
     @Override
     List<Login> findAll();
@@ -31,4 +31,15 @@ public interface LoginRepository extends JpaRepository<Login, Long> {
     @Modifying
     @Query("UPDATE login SET password = ?1 WHERE idLogin = ?2")
     void updateLoginPassword(String password, Long id_login);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE login L SET L.active = ?1 WHERE L.email = ?2 and L.generatedCode=?3")
+    void updateLoginChildActive(int active, String email, int generatedCode);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE login L SET L.active = ?1 WHERE L.idLogin = ?2")
+    void updateLoginDeactivate(int active,  long idLogin);
+
 }

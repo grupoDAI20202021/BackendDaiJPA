@@ -30,14 +30,28 @@ public class Login {
     @JoinColumn(name = "idRole", referencedColumnName = "idRole", nullable = true)
     private Role role;
 
+    private int active;
+
+    private int generatedCode;
+
     public Login() {
     }
 
-    public Login(Long idLogin, @Email(message = "Insert a valid email") String email, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number") String password, Role role) {
+    public Login(Long idLogin, @Email(message = "Insert a valid email") String email, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number") String password, Role role,int active) {
         this.idLogin = idLogin;
         this.email = email;
         this.password = password;
         this.role = role;
+        this.active=active;
+    }
+
+    public Login(Long idLogin, @Email(message = "Insert a valid email") String email, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number") String password, Role role,int active,int generatedCode) {
+        this.idLogin = idLogin;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.active=active;
+        this.generatedCode=generatedCode;
     }
 
     public Long getIdLogin() {
@@ -70,5 +84,21 @@ public class Login {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public int getGeneratedCode() {
+        return generatedCode;
+    }
+
+    public void setGeneratedCode(int generatedCode) {
+        this.generatedCode = generatedCode;
     }
 }

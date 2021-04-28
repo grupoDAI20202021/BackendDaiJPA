@@ -3,6 +3,7 @@ package daibackend.demo.model;
 import daibackend.demo.util.ConstantUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -36,6 +37,11 @@ public class Child {
 
     private long idAvatar;
 
+    @Email(message = "Insert a valid email")
+    private String parentEmail;
+
+
+
     public Child() {
     }
 
@@ -47,6 +53,17 @@ public class Child {
         this.address=address;
         this.contact=contact;
         this.idAvatar=idAvatar;
+    }
+
+    public Child(Long idChild, Login login, String name, int age,String address,String contact,long idAvatar,String parentEmail) {
+        this.idChild = idChild;
+        this.login = login;
+        this.name = name;
+        this.age = age;
+        this.address=address;
+        this.contact=contact;
+        this.idAvatar=idAvatar;
+        this.parentEmail=parentEmail;
     }
 
     public Long getIdChild() {
@@ -104,4 +121,13 @@ public class Child {
     public void setIdAvatar(long idAvatar) {
         this.idAvatar = idAvatar;
     }
+
+    public String getParentEmail() {
+        return parentEmail;
+    }
+
+    public void setParentEmail(String parentEmail) {
+        this.parentEmail = parentEmail;
+    }
+
 }

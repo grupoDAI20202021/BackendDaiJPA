@@ -31,6 +31,8 @@ public class Institution {
     @Pattern(regexp = ConstantUtils.ADDRESS_PATTERN, message = "Can only letters, letters with special characters, numbers and special characters (\",\", \"º\", \" \")")
     private String address;
 
+    private int active;
+
     public Institution() {
     }
 
@@ -40,6 +42,7 @@ public class Institution {
         this.townHall = townHall;
         this.name = name;
         this.address = address;
+        this.active=1;
     }
 
     public Long getIdInstitution() {
@@ -80,5 +83,13 @@ public class Institution {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 }

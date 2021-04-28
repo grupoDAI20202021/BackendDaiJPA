@@ -25,6 +25,10 @@ public class Inscription implements Serializable {
 
     private int evaluation;
 
+    private int active;
+
+    private int generatedCode;
+
     public Inscription() {
     }
 
@@ -33,6 +37,16 @@ public class Inscription implements Serializable {
         this.activity = activity;
         this.presence = presence;
         this.evaluation = evaluation;
+        this.active=1;
+    }
+
+    public Inscription(Child child, Activity activity, int presence, int evaluation, int generatedCode) {
+        this.child = child;
+        this.activity = activity;
+        this.presence = presence;
+        this.evaluation = evaluation;
+        this.active = 0;
+        this.generatedCode = generatedCode;
     }
 
     public Inscription(Child child, Activity activity) {
@@ -93,6 +107,22 @@ public class Inscription implements Serializable {
                 ", presence=" + presence +
                 ", evaluation=" + evaluation +
                 '}';
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public int getGeneratedCode() {
+        return generatedCode;
+    }
+
+    public void setGeneratedCode(int generatedCode) {
+        this.generatedCode = generatedCode;
     }
 }
 

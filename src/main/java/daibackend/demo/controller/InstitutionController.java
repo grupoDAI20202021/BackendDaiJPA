@@ -39,7 +39,7 @@ public class InstitutionController {
                 || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
             return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
         }*/
-        return institutionRepository.findAllInstitution();
+        return institutionRepository.findAllInstitution(1);
     }
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
     @GetMapping("/institutions/{idInstitution}")
@@ -109,14 +109,14 @@ public class InstitutionController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPassword = passwordEncoder.encode(password);
             // Create Login
-            Login l = new Login(null,email,hashedPassword,role);
+            Login l = new Login(null,email,hashedPassword,role,1);
             loginRepository.save(l);
 
             // Create Institution
             Institution newInstitution = new Institution(null,l,townHall,name,address);
             institutionRepository.save(newInstitution);
 
-            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created",loginRepository.findDistinctByEmail(email).getIdLogin()),
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created",loginRepository.findDistinctByEmailAndActive(email,1).getIdLogin()),
                     HttpStatus.CREATED);
 
         } catch (Exception e) {

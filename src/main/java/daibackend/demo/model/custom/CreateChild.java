@@ -12,6 +12,9 @@ public class CreateChild {
     @Email(message = "Insert a valid email")
     private String email;
 
+    @Email(message = "Insert a valid email")
+    private String parentEmail;
+
     @NotBlank(message = "Can't be blank")
     @Pattern(regexp = ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number")
     private String password;
@@ -39,7 +42,7 @@ public class CreateChild {
 
     private Role role;
 
-    public CreateChild(@Email(message = "Insert a valid email") String email, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number") String password, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number") String confirmPassword, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces") String name, int age, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces") String address, Role role,String contact,long idAvatar) {
+    public CreateChild(@Email(message = "Insert a valid email") String email, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number") String password, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.PASSWORD_PATTERN, message = "Needs at least 1 UpperCase, 1 LowerCase and 1 Number") String confirmPassword, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces") String name, int age, @NotBlank(message = "Can't be blank") @Pattern(regexp = ConstantUtils.CHAR_PATTERN, message = "Can only letters, letters with special characters and spaces") String address, Role role,String contact,long idAvatar,String parentEmail) {
         this.email = email;
         this.password = password;
         this.confirmPassword = confirmPassword;
@@ -49,6 +52,7 @@ public class CreateChild {
         this.role = role;
         this.contact=contact;
         this.idAvatar=idAvatar;
+        this.parentEmail=parentEmail;
     }
 
     public String getEmail() {
@@ -121,5 +125,13 @@ public class CreateChild {
 
     public void setIdAvatar(long idAvatar) {
         this.idAvatar = idAvatar;
+    }
+
+    public String getParent_email() {
+        return parentEmail;
+    }
+
+    public void setParent_email(String parentEmail) {
+        this.parentEmail = parentEmail;
     }
 }

@@ -28,11 +28,16 @@ public class updateActivityInstitution {
     @Pattern(regexp = ConstantUtils.ADDRESS_PATTERN, message = "Can only letters, letters with special characters, numbers and special characters (\",\", \"º\", \" \")")
     private String address;
 
-    public updateActivityInstitution(Date init_data,  Date end_data, int spaces, String address) {
+    @NotBlank(message = "Can't be blank")
+    @Pattern(regexp = ConstantUtils.ADDRESS_PATTERN, message = "Can only letters, letters with special characters, numbers and special characters (\",\", \"º\", \" \")")
+    private String title;
+
+    public updateActivityInstitution(Date init_data,  Date end_data, int spaces, String address,String title) {
         this.init_data = init_data;
         this.end_data = end_data;
         this.spaces = spaces;
         this.address = address;
+        this.title=title;
     }
 
     public Date getInit_data() {
@@ -65,5 +70,13 @@ public class updateActivityInstitution {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

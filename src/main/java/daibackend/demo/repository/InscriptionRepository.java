@@ -16,22 +16,23 @@ import java.util.List;
 
 public interface InscriptionRepository extends JpaRepository<Inscription, InscriptionId> {
 
-    @Query(value ="Select new daibackend.demo.model.custom.RankList(C.idChild,C.name,C.age,Sum(I.evaluation),C.idAvatar) from child C left join inscription I on C.idChild=I.child.idChild group by C.idChild order by SUM(I.evaluation) desc")
-    List <RankList> findRankByPoints();
+    @Query(value ="Select new daibackend.demo.model.custom.RankList(C.idChild,C.name,C.age,Sum(I.evaluation),C.idAvatar) from child C left join inscription I on C.idChild=I.child.idChild where I.active=?1 group by C.idChild order by SUM(I.evaluation)  desc ")
+    List <RankList> findRankByPoints(int active);
+
 
     Inscription findDistinctByActivityAndChild(Activity activity, Child child);
 
-    @Query(value = "SELECT new daibackend.demo.model.custom.InscriptionActivitiesByChildList(A.idActivity,A.init_data,A.end_data, I.evaluation, A.title, AT.name,A.address) FROM activity_Type AT,inscription I, activity A, child C  where A.idActivity= I.activity.idActivity and C.idChild=?1  and C.idChild=I.child.idChild and I.presence=?2 and AT.idActivityType=A.activityType.idActivityType" )
-    List<InscriptionActivitiesByChildList>  findAllByActivityChild(long idChild,int presence);
+    @Query(value = "SELECT new daibackend.demo.model.custom.InscriptionActivitiesByChildList(A.idActivity,A.init_data,A.end_data, I.evaluation, A.title, AT.name,A.address) FROM activity_Type AT,inscription I, activity A, child C  where A.idActivity= I.activity.idActivity and C.idChild=?1  and C.idChild=I.child.idChild and I.presence=?2 and AT.idActivityType=A.activityType.idActivityType and I.active=?3" )
+    List<InscriptionActivitiesByChildList>  findAllByActivityChild(long idChild,int presence,int active);
 
 
-    @Query(value = "SELECT new daibackend.demo.model.custom.InscriptionActivitiesByChildList(A.idActivity,A.init_data,A.end_data, I.evaluation, A.title, AT.name,A.address) FROM activity_Type AT,inscription I, activity A, child C  where A.idActivity= I.activity.idActivity and C.idChild=?1 and C.idChild=I.child.idChild and A.status=?2 and AT.idActivityType=A.activityType.idActivityType" )
-    List<InscriptionActivitiesByChildList>  findAllByCurrentActivityChild(long idChild,String status);
+    @Query(value = "SELECT new daibackend.demo.model.custom.InscriptionActivitiesByChildList(A.idActivity,A.init_data,A.end_data, I.evaluation, A.title, AT.name,A.address) FROM activity_Type AT,inscription I, activity A, child C  where A.idActivity= I.activity.idActivity and C.idChild=?1 and C.idChild=I.child.idChild and A.status=?2 and AT.idActivityType=A.activityType.idActivityType and I.active=?3" )
+    List<InscriptionActivitiesByChildList>  findAllByCurrentActivityChild(long idChild,String status,int active);
 
 
 
-    @Query(value = "SELECT new daibackend.demo.model.custom.InscriptionChildrenByActivityList(C.idChild,C.name,C.age) FROM inscription I, child C  where I.activity.idActivity=?1 and C.idChild=I.child.idChild" )
-    List<InscriptionChildrenByActivityList>  findAllByChildActivity(long idActivity);
+    @Query(value = "SELECT new daibackend.demo.model.custom.InscriptionChildrenByActivityList(C.idChild,C.name,C.age) FROM inscription I, child C  where I.activity.idActivity=?1 and C.idChild=I.child.idChild and I.active=?2" )
+    List<InscriptionChildrenByActivityList>  findAllByChildActivity(long idActivity,int active);
 
     @Transactional
     @Modifying
@@ -43,6 +44,11 @@ public interface InscriptionRepository extends JpaRepository<Inscription, Inscri
     @Query(value = "update inscription I set I.evaluation=?1 WHERE I.child.idChild=?2 and I.activity.idActivity=?3")
     void updateEvaluation(int evaluation,long id_child, long id_activity);
 
+    @Transactional
+    @Modifying
+    @Query(value = "update inscription I set I.active=?1 WHERE I.child.idChild=?2 and I.activity.idActivity=?3 and I.generatedCode=?4")
+    void updateActive(int active,long id_child, long id_activity,int generatedCode);
+
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM OAcmZAopsu.inscription WHERE OAcmZAopsu.inscription.id_activity=? and OAcmZAopsu.inscription.id_child=?;",nativeQuery = true )
@@ -50,6 +56,6 @@ public interface InscriptionRepository extends JpaRepository<Inscription, Inscri
 
     @Transactional
     @Modifying
-    @Query(value = "Insert into OAcmZAopsu.inscription (OAcmZAopsu.inscription.id_child,OAcmZAopsu.inscription.id_activity,OAcmZAopsu.inscription.presence,OAcmZAopsu.inscription.evaluation) Values (?,?,?,?)",nativeQuery = true )
-    void saveInscription(long idChild, long idActivity,int presence, int evaluation);
+    @Query(value = "Insert into OAcmZAopsu.inscription (OAcmZAopsu.inscription.id_child,OAcmZAopsu.inscription.id_activity,OAcmZAopsu.inscription.presence,OAcmZAopsu.inscription.evaluation,OAcmZAopsu.inscription.active,OAcmZAopsu.inscription.generated_code) Values (?,?,?,?,?,?)",nativeQuery = true )
+    void saveInscription(long idChild, long idActivity,int presence, int evaluation,int active, int generatedCode);
 }

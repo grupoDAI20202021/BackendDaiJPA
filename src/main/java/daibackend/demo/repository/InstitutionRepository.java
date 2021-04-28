@@ -15,8 +15,8 @@ public interface InstitutionRepository extends JpaRepository<Institution, Long> 
 
     Institution findDistinctByLogin(Login login);
 
-    @Query(value = "SELECT new daibackend.demo.model.custom.InstitutionList(L.email,T.name,T.address,T.townHall.name,T.idInstitution) FROM login L, institution T where L.idLogin= T.login.idLogin" )
-    List<InstitutionList> findAllInstitution();
+    @Query(value = "SELECT new daibackend.demo.model.custom.InstitutionList(L.email,T.name,T.address,T.townHall.name,T.idInstitution) FROM login L, institution T where L.idLogin= T.login.idLogin  and T.active=?1" )
+    List<InstitutionList> findAllInstitution(int active);
 
     @Transactional
     @Modifying

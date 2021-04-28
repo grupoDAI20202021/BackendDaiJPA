@@ -36,7 +36,7 @@ public class TownHallController {
                 || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
             return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
         }*/
-        return townHallRepository.findAllTownHallList();
+        return townHallRepository.findAllTownHallList(1);
     }
 
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
@@ -86,14 +86,14 @@ public class TownHallController {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPassword = passwordEncoder.encode(password);
             // Create Login
-            Login l = new Login(null,email,hashedPassword,role);
+            Login l = new Login(null,email,hashedPassword,role,1);
             loginRepository.save(l);
 
             // Create Institution
             TownHall townHall = new TownHall(null,l,name,address);
             townHallRepository.save(townHall);
 
-            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created",loginRepository.findDistinctByEmail(email).getIdLogin()),
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created",loginRepository.findDistinctByEmailAndActive(email,1).getIdLogin()),
                     HttpStatus.CREATED);
 
         } catch (Exception e) {
