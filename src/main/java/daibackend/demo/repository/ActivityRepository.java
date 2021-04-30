@@ -65,10 +65,10 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
     @Query("UPDATE activity A SET A.sponsor.idSponsor= ?1,  A.status=?2 WHERE A.idActivity = ?3")
     void updateActivityAsTownHall(long idSponsor,String status,long idActivity);
 
-    @Override
-    void delete(Activity activity);
-
 
     @Query("SELECT  Count(A) FROM activity A,activity_Type AT,institution I WHERE I.idInstitution=A.institution.idInstitution and A.activityType.idActivityType=AT.idActivityType  and A.status = ?1 and A.activityType.idActivityType=?2 and I.active=?3 ORDER BY A.idActivity DESC")
     int findActivitiesByStatusNumber(String status,long idActivityType,int active);
+
+    @Override
+    void delete(Activity activity);
 }

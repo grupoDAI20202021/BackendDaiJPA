@@ -44,6 +44,20 @@ public class PostController {
         return postRepository.findAll();
     }
 
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @GetMapping("/posts/{idPost}")
+    public Post listPost(@PathVariable long idPost/*@CurrentUser UserPrincipal currentUser*/) {
+        //User userLogged = userRepository.findByUserId(currentUser.getId());
+        //Set<Role> roleUserLogged = userLogged.getRoles();
+
+        // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        return postRepository.findDistinctByIdPost(idPost);
+    }
+
     @PostMapping("/posts")
     public ResponseEntity<ApiResponse> savePost(@RequestBody CreatePost post) {
         try {

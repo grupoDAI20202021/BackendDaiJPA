@@ -210,6 +210,37 @@ public class InstitutionController {
                         HttpStatus.BAD_REQUEST);
             }
         }
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Deactivate
+    @PutMapping("/institutions/{idInstitution}/deactivate")
+    public ResponseEntity<ApiResponse> deleteLogic(@PathVariable (value="idInstitution")long idInstitution) {
+        try {
+            if(institutionRepository.findDistinctByIdInstitution(idInstitution).equals(null)){
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                        HttpStatus.BAD_REQUEST);
+            }
+            long idLogin = institutionRepository.findDistinctByIdInstitution(idInstitution).getLogin().getIdLogin();
+
+            institutionRepository.deleteLogic(0,idInstitution);
+            loginRepository.updateLoginDeactivate(0,idLogin);
+
+
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Institution eliminated.", idInstitution),
+                    HttpStatus.CREATED);
+            //User userLogged = userRepository.findByUserId(currentUser.getId());
+            //Set<Role> roleUserLogged = userLogged.getRoles();
+
+            // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        } catch (Exception e) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @DeleteMapping("/institutions/{idInstitution}")
     public ResponseEntity<ApiResponse> deleteInstitution(@PathVariable (value="idInstitution")long idInstitution) {
 

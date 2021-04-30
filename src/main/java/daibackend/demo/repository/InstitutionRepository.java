@@ -2,6 +2,7 @@ package daibackend.demo.repository;
 
 import daibackend.demo.model.Institution;
 import daibackend.demo.model.Login;
+import daibackend.demo.model.TownHall;
 import daibackend.demo.model.custom.InstitutionList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,10 +19,18 @@ public interface InstitutionRepository extends JpaRepository<Institution, Long> 
     @Query(value = "SELECT new daibackend.demo.model.custom.InstitutionList(L.email,T.name,T.address,T.townHall.name,T.idInstitution) FROM login L, institution T where L.idLogin= T.login.idLogin  and T.active=?1" )
     List<InstitutionList> findAllInstitution(int active);
 
+
+    List<Institution> findAllByTownHall(TownHall townHall);
+
     @Transactional
     @Modifying
     @Query("UPDATE institution I SET I.name= ?1, I.address= ?2 where I.idInstitution=?3")
     void updateInstitution(String name ,String address, long id_institution);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE institution I SET I.active=?1 where I.idInstitution = ?2")
+    void deleteLogic(int active , Long idInstitution);
 
     @Override
     void delete(Institution institution);

@@ -6,6 +6,7 @@ import daibackend.demo.model.Role;
 import daibackend.demo.model.TownHall;
 import daibackend.demo.model.custom.*;
 import daibackend.demo.payload.response.ApiResponse;
+import daibackend.demo.repository.InstitutionRepository;
 import daibackend.demo.repository.LoginRepository;
 import daibackend.demo.repository.TownHallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class TownHallController {
 
     @Autowired
     LoginRepository loginRepository;
+
+    @Autowired
+    InstitutionRepository institutionRepository;
 
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
     @GetMapping("/townhalls")
@@ -152,6 +156,7 @@ public class TownHallController {
                     HttpStatus.BAD_REQUEST);
         }
     }
+
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
     @PutMapping("/townhalls/{idTownHall}")
     public ResponseEntity<ApiResponse> updateTownHall(@PathVariable (value="idTownHall")long idTownHall, @RequestBody updateEmail update) {
@@ -187,6 +192,43 @@ public class TownHallController {
                     HttpStatus.BAD_REQUEST);
         }
     }
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Deactivate
+    @PutMapping("/townhalls/{idTownHall}/deactivate")
+    public ResponseEntity<ApiResponse> deleteLogic(@PathVariable (value="idTownHall")long idTownHall) {
+        try {
+            if (townHallRepository.findDistinctByIdTownHall(idTownHall).equals(null)) {
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                        HttpStatus.BAD_REQUEST);
+            }
+            long idLogin = townHallRepository.findDistinctByIdTownHall(idTownHall).getLogin().getIdLogin();
+            List<Institution> institutionList = institutionRepository.findAllByTownHall(townHallRepository.findDistinctByIdTownHall(idTownHall));
+
+            for(int i =0;i< institutionList.size();i++){
+                institutionRepository.deleteLogic(0, institutionList.get(i).getIdInstitution());
+            }
+            townHallRepository.deleteLogic(0,idTownHall);
+            loginRepository.updateLoginDeactivate(0,idLogin);
+
+
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "TownHall eliminated.", idTownHall),
+                    HttpStatus.CREATED);
+            //User userLogged = userRepository.findByUserId(currentUser.getId());
+            //Set<Role> roleUserLogged = userLogged.getRoles();
+
+            // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
+        } catch (Exception e) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
 
     @DeleteMapping("/townhalls/{idTownHall}")
     public ResponseEntity<ApiResponse> deleteTownHall(@PathVariable (value="idTownHall")long idTownHall) {
