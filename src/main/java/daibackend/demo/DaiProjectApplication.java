@@ -14,13 +14,18 @@ import com.jcraft.jsch.Session;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @SpringBootApplication
 @EntityScan(basePackageClasses = { DaiProjectApplication.class, Jsr310JpaConverters.class })
 public class DaiProjectApplication implements ServletContextListener {
 
     protected final Logger log = Logger.getLogger(String.valueOf(this.getClass()));
+
+
 
     public DaiProjectApplication() {
         try {
@@ -51,7 +56,6 @@ public class DaiProjectApplication implements ServletContextListener {
     void init() {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Lisbon"));
     }
-
     public static void main(String[] args) {
         SpringApplication.run(DaiProjectApplication.class, args);
     }

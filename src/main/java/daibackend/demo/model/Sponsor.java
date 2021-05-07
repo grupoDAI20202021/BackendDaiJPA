@@ -35,15 +35,17 @@ public class Sponsor {
     @NotNull(message = "Can't be null")
     private Date insert_data;
 
+    private int active;
     public Sponsor() {
     }
 
-    public Sponsor(Long idSponsor, TownHall townHall, String name, Image image,Date insert_data) {
+    public Sponsor(Long idSponsor, TownHall townHall, String name, Image image,Date insert_data,int active) {
         this.idSponsor = idSponsor;
         this.townHall = townHall;
         this.name = name;
         this.image = image;
         this.insert_data=insert_data;
+        this.active=active;
     }
 
     public Long getIdSponsor() {
@@ -84,5 +86,13 @@ public class Sponsor {
 
     public void setInsert_data(Date insert_data) {
         this.insert_data = insert_data;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
     }
 }

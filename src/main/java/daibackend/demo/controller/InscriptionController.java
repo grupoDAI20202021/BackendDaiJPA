@@ -12,6 +12,8 @@ import daibackend.demo.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +31,21 @@ public class InscriptionController {
 
     @Autowired
     ActivityRepository activityRepository;
+
+    @Autowired
+    private JavaMailSender emailSender;
+
+    public void sendSimpleMessage(
+            String to, String subject, String text) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@baeldung.com");
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
+        emailSender.send(message);
+
+    }
 
     //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
     @GetMapping("/children/{idChild}/activities")
@@ -101,10 +118,13 @@ public class InscriptionController {
                         HttpStatus.CREATED);
 
             } else {
+
                 Random rnd = new Random();
                 int number = rnd.nextInt(900000)  + 100000;
                 Inscription I = new Inscription();
                 inscriptionRepository.saveInscription(idChild,idActivity,I.getPresence(),I.getEvaluation(),0,number);
+                String message = "Caro encarregado,"+System.lineSeparator()+ System.lineSeparator()+"O seu educando "+child.getName()+" inscreveu-se na atividade "+ activityRepository.findByIdActivity(idActivity).getName()+" que decorrerá em "+ activityRepository.findByIdActivity(idActivity).getAddress() +", na seguinte data, "+activityRepository.findByIdActivity(idActivity).getInit_data().toString()+"." + System.lineSeparator()+ System.lineSeparator()+"Para ativar a sua inscrição, o seguinte código foi gerado: " +String.valueOf(number)+ System.lineSeparator() +System.lineSeparator()+"Com os melhores cumprimentos,"+System.lineSeparator()+"ProChildColab";
+                sendSimpleMessage(childRepository.findDistinctByIdChild(idChild).getParentEmail(),"City4kids- Código de ativação de inscrição", message);
                 return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Inscription created", idChild),
                         HttpStatus.CREATED);
             }

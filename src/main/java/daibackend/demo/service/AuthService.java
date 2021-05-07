@@ -118,6 +118,7 @@ public class AuthService {
     public ResponseEntity<ApiResponse> logoutUser(HttpServletRequest request, HttpServletResponse response) {
         System.out.println(CookieUtils.getCookie(request,"token"));
         boolean isOK = CookieUtils.deleteCookie(request, response, "token");
+        boolean isOK1 =CookieUtils.deleteCookie(request, response, "role");
         System.out.println(isOK);
 
         if (isOK == true) {

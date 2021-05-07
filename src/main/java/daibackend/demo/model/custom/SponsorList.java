@@ -1,5 +1,7 @@
 package daibackend.demo.model.custom;
 
+import daibackend.demo.model.Image;
+
 import java.util.Date;
 
 public class SponsorList {
@@ -7,15 +9,19 @@ public class SponsorList {
     private String name;
     private Date insert_data;
     private long idImage;
+    private Image image;
+    private int active;
 
     public SponsorList() {
     }
 
-    public SponsorList(long idSponsor, String name, Date insert_data, long idImage) {
+    public SponsorList(long idSponsor, String name, Date insert_data, long idImage,Image image,int active) {
         this.idSponsor = idSponsor;
         this.name = name;
         this.insert_data = insert_data;
         this.idImage = idImage;
+        this.image = image;
+        this.active=active;
     }
 
     public long getIdSponsor() {
@@ -50,4 +56,19 @@ public class SponsorList {
         this.idImage = idImage;
     }
 
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
 }

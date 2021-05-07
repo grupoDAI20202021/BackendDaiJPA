@@ -11,6 +11,8 @@ import daibackend.demo.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,6 +29,21 @@ public class ChildController {
 
     @Autowired
     LoginRepository loginRepository;
+
+    @Autowired
+    private JavaMailSender emailSender;
+
+    public void sendSimpleMessage(
+            String to, String subject, String text) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@baeldung.com");
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
+        emailSender.send(message);
+
+    }
 
     @PreAuthorize("hasRole('INSTITUTION') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
     @GetMapping("/children")
@@ -111,6 +128,9 @@ public class ChildController {
                     loginRepository.save(l);
                     // Create Child
                     childRepository.save(newChild);
+                    String message = "Caro encarregado,"+System.lineSeparator()+ System.lineSeparator()+"O código de ativação do seu educando é: "+ String.valueOf(l.getGeneratedCode()) + System.lineSeparator() +System.lineSeparator()+"Com os melhores cumprimentos,"+System.lineSeparator()+"ProChildColab";
+                    sendSimpleMessage(newChild.getParentEmail(),"City4kids- Código de ativação de conta do seu educando", message);
+
                     return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created", newChild.getIdChild()),
                             HttpStatus.CREATED);
                     // this will convert any number sequence into 6 character.

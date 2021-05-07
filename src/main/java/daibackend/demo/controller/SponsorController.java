@@ -48,11 +48,41 @@ public class SponsorController {
                         HttpStatus.BAD_REQUEST);
             }
 
-            Sponsor sponsor = new Sponsor(null ,townHall,name,null,date);
+            Sponsor sponsor = new Sponsor(null ,townHall,name,null,date,1);
             sponsorRepository.save(sponsor);
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Sponsor created",sponsor.getIdSponsor()),
                     HttpStatus.CREATED);
 
+        } catch (Exception e) {
+            return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Deactivate
+    @PutMapping("sponsors/{idSponsor}")
+    public ResponseEntity<ApiResponse> deleteLogic(@PathVariable (value="idSponsor")long idSponsor) {
+        try {
+            if(sponsorRepository.findDistinctByIdSponsor(idSponsor).equals(null)){
+                return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
+                        HttpStatus.BAD_REQUEST);
+            }
+
+
+           sponsorRepository.deleteLogic(0,idSponsor);
+
+
+            return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Sponsor eliminated.", idSponsor),
+                    HttpStatus.CREATED);
+            //User userLogged = userRepository.findByUserId(currentUser.getId());
+            //Set<Role> roleUserLogged = userLogged.getRoles();
+
+            // Get Permissions
+        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
+                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
+            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
+        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);

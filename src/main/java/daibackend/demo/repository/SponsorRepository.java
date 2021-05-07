@@ -17,7 +17,7 @@ public interface SponsorRepository extends JpaRepository<Sponsor, Long> {
     @Override
     List<Sponsor> findAll();
 
-    @Query("SELECT new daibackend.demo.model.custom.SponsorList(S.idSponsor,S.name,S.insert_data,S.image.idImage) FROM sponsor S where S.townHall.idTownHall=?1")
+    @Query("SELECT new daibackend.demo.model.custom.SponsorList(S.idSponsor,S.name,S.insert_data,S.image.idImage,S.image,S.active) FROM sponsor S where S.townHall.idTownHall=?1")
     List<SponsorList> findAllByTownHall(long idTownHall);
 
     @Transactional
@@ -29,6 +29,16 @@ public interface SponsorRepository extends JpaRepository<Sponsor, Long> {
     @Modifying
     @Query("UPDATE sponsor S SET S.image= ?1 where S.idSponsor = ?2")
     void updateSponsorImage(Image image , Long id_sponsor);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE sponsor S SET S.image.idImage = ?1 WHERE S.idSponsor = ?2")
+    void updateSponsorPhotoId(Long idImage, Long idSponsor);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE sponsor S SET S.active=?1 where S.idSponsor = ?2")
+    void deleteLogic(int active , Long idSponsor);
 
     @Override
     void delete(Sponsor sponsor);
