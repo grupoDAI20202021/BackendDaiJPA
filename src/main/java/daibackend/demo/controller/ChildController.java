@@ -110,7 +110,7 @@ public class ChildController {
 
                 if(age >= 13) {
                     Login l = new Login(null,email,hashedPassword,role,1);
-                    Child newChild = new Child(null, l, name, age, address, contact, idAvatar);
+                    Child newChild = new Child(null, l, name, age, address, contact);
                     loginRepository.save(l);
 
                     // Create Child
@@ -124,7 +124,7 @@ public class ChildController {
                     Random rnd = new Random();
                     int number = rnd.nextInt(900000)  + 100000;
                     Login l = new Login(null,email,hashedPassword,role,0,number);
-                    Child newChild = new Child(null, l, name, age, address, contact, idAvatar,parentEmail);
+                    Child newChild = new Child(null, l, name, age, address, contact,parentEmail);
                     loginRepository.save(l);
                     // Create Child
                     childRepository.save(newChild);

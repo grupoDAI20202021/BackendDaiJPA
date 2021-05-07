@@ -45,24 +45,22 @@ public class Child {
     public Child() {
     }
 
-    public Child(Long idChild, Login login, String name, int age,String address,String contact,long idAvatar) {
+    public Child(Long idChild, Login login, String name, int age,String address,String contact) {
         this.idChild = idChild;
         this.login = login;
         this.name = name;
         this.age = age;
         this.address=address;
         this.contact=contact;
-        this.idAvatar=idAvatar;
     }
 
-    public Child(Long idChild, Login login, String name, int age,String address,String contact,long idAvatar,String parentEmail) {
+    public Child(Long idChild, Login login, String name, int age,String address,String contact,String parentEmail) {
         this.idChild = idChild;
         this.login = login;
         this.name = name;
         this.age = age;
         this.address=address;
         this.contact=contact;
-        this.idAvatar=idAvatar;
         this.parentEmail=parentEmail;
     }
 
