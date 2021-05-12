@@ -24,6 +24,6 @@ public interface PreferenceRepository extends JpaRepository<Preference, Long> {
     void deleteDistinctByActivityTypeAndChild(ActivityType activityType,Child child);
 
 
-    @Query(value="Select new daibackend.demo.model.custom.DataPreferenceDashboard(AT.idActivityType,AT.name,AT.color ,Count(P)) From preference P ,activity_Type AT where AT.idActivityType=P.activityType.idActivityType group by AT.idActivityType")
+    @Query(value="Select new daibackend.demo.model.custom.DataPreferenceDashboard(AT.idActivityType,AT.name,AT.color ,Count(P)) From preference P ,activity_Type AT where AT.idActivityType=P.activityType.idActivityType group by AT.idActivityType order by Count(P) desc")
     List<DataPreferenceDashboard> findQuantity(PageRequest pageRequest);
 }

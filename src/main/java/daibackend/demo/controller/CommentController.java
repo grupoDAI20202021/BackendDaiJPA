@@ -54,7 +54,7 @@ public class CommentController {
             Post post= postRepository.findDistinctByIdPost(idPost);
             Long idChild = comment.getIdChild();
             Date insert_date = new Date();
-            String content= post.getPost();
+            String content= comment.getPost();
             Child child = childRepository.findDistinctByIdChild(idChild);
             Comment newComment = new Comment(null,insert_date,child,post,content);
             commentRepository.save(newComment);
