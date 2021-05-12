@@ -43,12 +43,11 @@ import java.util.logging.Logger;
     LoginRepository loginRepository;
 
 
-        @PreAuthorize("hasRole('ADMINISTRATOR')")
+        //@PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('CHILD')")
         @GetMapping("/activities")
         public List<Activity> listActivities(@CurrentUser UserPrincipal currentUser) {
             return activityRepository.findAllActivities(1);
         }
-
 
     //@PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/activities/{idActivity}")

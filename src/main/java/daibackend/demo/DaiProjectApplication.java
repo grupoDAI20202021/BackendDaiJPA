@@ -19,6 +19,7 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
+
 @SpringBootApplication
 @EntityScan(basePackageClasses = { DaiProjectApplication.class, Jsr310JpaConverters.class })
 public class DaiProjectApplication implements ServletContextListener {
@@ -51,7 +52,6 @@ public class DaiProjectApplication implements ServletContextListener {
             log.info("ssh settings is failed. skip!");
         }
     }
-
     @PostConstruct
     void init() {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Lisbon"));
@@ -61,3 +61,4 @@ public class DaiProjectApplication implements ServletContextListener {
     }
 
 }
+
