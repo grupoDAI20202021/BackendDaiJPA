@@ -13,10 +13,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -34,14 +37,23 @@ public class ChildController {
     private JavaMailSender emailSender;
 
     public void sendSimpleMessage(
-            String to, String subject, String text) {
+            String to, String subject, String text) throws MessagingException {
 
         SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("noreply@baeldung.com");
+
+        MimeMessage mailMessage = emailSender.createMimeMessage();
+
+        mailMessage.setSubject(subject, "UTF-8");
+
+        MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, "UTF-8");
+        helper.setFrom("noreply@baeldung.com");
+        helper.setTo(to);
+        helper.setText(text, true);
+
+       /* message.setFrom("noreply@baeldung.com");
         message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        emailSender.send(message);
+        message.setText(text);*/
+        emailSender.send(mailMessage);
 
     }
 
@@ -114,12 +126,14 @@ public class ChildController {
                     loginRepository.save(l);
                     // Create Child
                     childRepository.save(newChild);
-                    String message = "Caro encarregado,"+System.lineSeparator()+ System.lineSeparator()+"O código de ativação do seu educando é: "+ String.valueOf(l.getGeneratedCode()) + System.lineSeparator() +System.lineSeparator()+"Com os melhores cumprimentos,"+System.lineSeparator()+"ProChildColab";
+                    //String message = "Caro encarregado,"+System.lineSeparator()+ System.lineSeparator()+"O código de ativação do seu educando é: "+ String.valueOf(l.getGeneratedCode()) + System.lineSeparator() +System.lineSeparator()+"Com os melhores cumprimentos,"+System.lineSeparator()+"ProChildColab";
+                    String message="";
+                    message+="<p>Caro encarregado,</p><br><p>Para ativar a conta do seu educando carregue no seguinte link:</p><br> \"<a href='http://127.0.0.1:8080/api/login/activate?updateEmail=\"+email+\"&updateGeneratedCode=\"+number+\"'>Clique Aqui!<a/>\"  <br><p>Com os melhores cumprimentos,<br>ProChildColab</p><br>";
+
                     sendSimpleMessage(newChild.getParentEmail(),"City4kids- Código de ativação de conta do seu educando", message);
 
                     return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Account created", newChild.getIdChild()),
                             HttpStatus.CREATED);
-                    // this will convert any number sequence into 6 character.
                 }
 
         } catch (Exception e) {
