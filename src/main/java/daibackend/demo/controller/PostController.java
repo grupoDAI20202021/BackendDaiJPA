@@ -15,6 +15,7 @@ import daibackend.demo.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -30,34 +31,19 @@ public class PostController {
     @Autowired
     ChildRepository childRepository;
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/posts")
     public List<Post> listPosts(/*@CurrentUser UserPrincipal currentUser*/) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return postRepository.findAll();
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/posts/{idPost}")
     public Post listPost(@PathVariable long idPost/*@CurrentUser UserPrincipal currentUser*/) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return postRepository.findDistinctByIdPost(idPost);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @PostMapping("/posts")
     public ResponseEntity<ApiResponse> savePost(@RequestBody CreatePost post) {
         try {
@@ -68,7 +54,7 @@ public class PostController {
             String content= post.getPost();
             Child child = childRepository.findDistinctByIdChild(idChild);
             Post newPost = new Post(null,insert_date,child,content);
-                postRepository.save(newPost);
+            postRepository.save(newPost);
                 return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Post created", newPost.getIdPost()),
                         HttpStatus.CREATED);
 
@@ -79,7 +65,7 @@ public class PostController {
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Se calhar tirar
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @PutMapping("/posts/{idPost}")
     public ResponseEntity<ApiResponse> updatePost(@PathVariable(value="idPost")long idPost, @RequestBody updateEmail update) {
         try {
@@ -96,10 +82,10 @@ public class PostController {
         return null;
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @DeleteMapping("/posts/{idPost}")
     public ResponseEntity<ApiResponse> deletePost(@PathVariable (value="idPost")long idPost) {
         try {
-            Post post = postRepository.findDistinctByIdPost(idPost);
             postRepository.deleteDistinctByIdPost(idPost);
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Post deleted.", idPost),
                     HttpStatus.CREATED);

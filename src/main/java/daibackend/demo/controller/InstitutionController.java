@@ -10,6 +10,7 @@ import daibackend.demo.repository.TownHallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,47 +29,25 @@ public class InstitutionController {
     @Autowired
     TownHallRepository townHallRepository;
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL')")
     @GetMapping("/institutions")
     public List<InstitutionList> listInstitutions(/*@CurrentUser UserPrincipal currentUser*/) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return institutionRepository.findAllInstitution(1);
     }
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') ")
     @GetMapping("/institutions/{idInstitution}")
     public Institution findInstitution(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idInstitution) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return institutionRepository.findDistinctByIdInstitution(idInstitution);
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') ")
     @GetMapping("/institutions/{idInstitution}/townhall")
     public long findTownHallByIntitution(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idInstitution) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return institutionRepository.getTownhallId(idInstitution);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/institutions") // Creat account
     public ResponseEntity<ApiResponse> saveInstitution(@RequestBody CreateInstitution institution) {
         try {
@@ -124,7 +103,8 @@ public class InstitutionController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Institution
+
+    @PreAuthorize("hasRole('INSTITUTION') ")  // Institution
     @PutMapping("/institutions/{idInstitution}/password")
     public ResponseEntity<ApiResponse> updateInstitutionPassword(@PathVariable (value="idInstitution")long idInstitution, @RequestBody updatePassword update) {
         try {
@@ -161,21 +141,14 @@ public class InstitutionController {
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Password updated.", idInstitution),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
 
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
-        //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PreAuthorize("hasRole('INSTITUTION') ")
         @PutMapping("/institutions/{idInstitution}")
         public ResponseEntity<ApiResponse> updateInstitution(@PathVariable (value="idInstitution")long idInstitution, @RequestBody updateEmail update) {
             try {
@@ -197,21 +170,14 @@ public class InstitutionController {
 
                 return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Email updated.", idInstitution),
                         HttpStatus.CREATED);
-                //User userLogged = userRepository.findByUserId(currentUser.getId());
-                //Set<Role> roleUserLogged = userLogged.getRoles();
 
-                // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
             } catch (Exception e) {
                 return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                         HttpStatus.BAD_REQUEST);
             }
         }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Deactivate
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('INSTITUTION') ")  // Deactivate
     @PutMapping("/institutions/{idInstitution}/deactivate")
     public ResponseEntity<ApiResponse> deleteLogic(@PathVariable (value="idInstitution")long idInstitution) {
         try {
@@ -227,20 +193,13 @@ public class InstitutionController {
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Institution eliminated.", idInstitution),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('INSTITUTION') ")
     @DeleteMapping("/institutions/{idInstitution}")
     public ResponseEntity<ApiResponse> deleteInstitution(@PathVariable (value="idInstitution")long idInstitution) {
 

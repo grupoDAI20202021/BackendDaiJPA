@@ -45,33 +45,19 @@ public class ChildController {
 
     }
 
-    @PreAuthorize("hasRole('INSTITUTION') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/children")
     public List<Child> listChildren(@CurrentUser UserPrincipal currentUser) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return childRepository.findAll();
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/children/{idChild}")
     public Child findChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
 
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return childRepository.findDistinctByIdChild(idChild);
     }
+
     @PostMapping("/children") // Creat account
     public ResponseEntity<ApiResponse> saveChild(@RequestBody CreateChild child) {
         try {
@@ -144,7 +130,7 @@ public class ChildController {
 
 
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PreAuthorize("hasRole('CHILD')")  // Child
     @PutMapping("/children/{idChild}/password")
     public ResponseEntity<ApiResponse> updateChildPassword(@PathVariable (value="idChild")long idChild, @RequestBody updatePassword update) {
         try {
@@ -181,21 +167,13 @@ public class ChildController {
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Password updated.", idChild),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PreAuthorize("hasRole('CHILD')")  // Child
     @PutMapping("/children/{idChild}")
     public ResponseEntity<ApiResponse> updateChild(@PathVariable (value="idChild")long idChild, @RequestBody updateEmail update) {
         try {
@@ -218,21 +196,13 @@ public class ChildController {
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Email updated.", idChild),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PreAuthorize("hasRole('CHILD')")  // Child
     @PutMapping("/children/{idChild}/avatar")
     public ResponseEntity<ApiResponse> updateChildAvatar(@PathVariable (value="idChild")long idChild, @RequestBody updateInt Int) {
         try {
@@ -248,19 +218,13 @@ public class ChildController {
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Avatar updated.", idChild),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
 
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
+    @PreAuthorize("hasRole ('ADMINISTRATOR') or hasRole('CHILD')")  // Child
     @DeleteMapping("/children/{idChild}")
     public ResponseEntity<ApiResponse> deleteChild(@PathVariable (value="idChild")long idChild) {
         try {

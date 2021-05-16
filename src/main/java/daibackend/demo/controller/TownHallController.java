@@ -12,6 +12,7 @@ import daibackend.demo.repository.TownHallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,35 +30,20 @@ public class TownHallController {
     @Autowired
     InstitutionRepository institutionRepository;
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL')")
     @GetMapping("/townhalls")
     public List<TownHallList> listTownHalls(/*@CurrentUser UserPrincipal currentUser*/) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return townHallRepository.findAllTownHallList(1);
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL')")
     @GetMapping("/townhalls/{idTownHall}")
     public TownHall getTownHall(/*@CurrentUser UserPrincipal currentUser*/@PathVariable long idTownHall) {
 
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return townHallRepository.findDistinctByIdTownHall(idTownHall);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/townhalls") // Creat account
     public ResponseEntity<ApiResponse> saveTownHall(@RequestBody CreateTownHall createTownHall) {
         try {
@@ -106,7 +92,7 @@ public class TownHallController {
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Institution
+    @PreAuthorize("hasRole('TOWNHALL')")
     @PutMapping("/townhalls/{idTownHall}/password")
     public ResponseEntity<ApiResponse> updateTownHallPassword(@PathVariable (value="idTownHall")long idTownHall, @RequestBody updatePassword update) {
         try {
@@ -143,21 +129,13 @@ public class TownHallController {
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Password updated.", idTownHall),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PreAuthorize("hasRole('TOWNHALL')")
     @PutMapping("/townhalls/{idTownHall}")
     public ResponseEntity<ApiResponse> updateTownHall(@PathVariable (value="idTownHall")long idTownHall, @RequestBody updateEmail update) {
         try {
@@ -179,21 +157,13 @@ public class TownHallController {
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Email updated.", idTownHall),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Deactivate
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL')")  // Deactivate
     @PutMapping("/townhalls/{idTownHall}/deactivate")
     public ResponseEntity<ApiResponse> deleteLogic(@PathVariable (value="idTownHall")long idTownHall) {
         try {
@@ -209,27 +179,15 @@ public class TownHallController {
             }
             townHallRepository.deleteLogic(0,idTownHall);
             loginRepository.updateLoginDeactivate(0,idLogin);
-
-
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "TownHall eliminated.", idTownHall),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
-
-
-
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL')")
     @DeleteMapping("/townhalls/{idTownHall}")
     public ResponseEntity<ApiResponse> deleteTownHall(@PathVariable (value="idTownHall")long idTownHall) {
        TownHall townHall = townHallRepository.findDistinctByIdTownHall(idTownHall);

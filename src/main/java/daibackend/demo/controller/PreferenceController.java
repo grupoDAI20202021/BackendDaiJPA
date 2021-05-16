@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,32 +30,17 @@ public class PreferenceController {
     @Autowired
     ActivityTypeRepository activityTypeRepository;
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @GetMapping("/preferences/{idChild}")
     public List<Preference> listActivitiesTypeByChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
 
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         Child child = childRepository.findDistinctByIdChild(idChild);
         return preferenceRepository.findAllByChild(child);
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR')  or hasROLE('CHILD')")
     @GetMapping("/preferences/{idChild}/activities")
     public List<PreferenceActivitiesByChild> listPreferenceActivitiesByChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         Child child = childRepository.findDistinctByIdChild(idChild);
         String status = "Aprovada";
         return preferenceRepository.findAllPreferenceActivitiesByChild(idChild,status);
@@ -105,6 +91,7 @@ public class PreferenceController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @DeleteMapping("/preferences/{idChild}/{idActivityType}")
     public ResponseEntity<ApiResponse> deletePreference(@PathVariable (value="idChild")long idChild, @PathVariable (value="idActivityType")long idActivityType) {
         Child child = childRepository.findDistinctByIdChild(idChild);
@@ -116,17 +103,9 @@ public class PreferenceController {
 
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION')")
     @GetMapping("/preferences/dashboard")
     public List<DataPreferenceDashboard> listPreferenceDashboard(/*@CurrentUser UserPrincipal currentUser*/ ) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return preferenceRepository.findQuantity(PageRequest.of(0,3));
     }
 }

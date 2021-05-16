@@ -34,7 +34,7 @@ public class ImageController {
     @Autowired
     SponsorRepository sponsorRepository;
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION')")
     @GetMapping(path = { "/photos/{imageId}" })
     public Image getImage(@PathVariable("imageId") Long imageName) throws IOException {
 
@@ -44,36 +44,12 @@ public class ImageController {
         return img;
     }
 
-   // @PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') ")
     @PutMapping(value = "/sponsors/upload-photos/{idSponsor}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<ApiResponse> updateUserPhoto(@PathVariable(value = "idSponsor") Long idSponsor,
                                                        @RequestParam("file") MultipartFile file, @CurrentUser UserPrincipal currentUser) {
         try {
             Sponsor sponsor = sponsorRepository.findDistinctByIdSponsor(idSponsor);
-            // Get User for Update
-           // User userUpdated = userRepository.findByUserId(userId);
-            //Set<Role> roles = userUpdated.getRoles();
-            //
-            // Get User Logged
-           // User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-            //
-
-            // Permissions Validations
-           /* if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")) {
-                if (userId != currentUser.getId()) {
-                    return new ResponseEntity<ApiResponse>(
-                            new ApiResponse(false, "A guard can only edit his own profile"), HttpStatus.BAD_REQUEST);
-                }
-            } else {
-                if (String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-                    if (!(String.valueOf(roles).equals("[Role [id=0]]")) && !(userId.equals(currentUser.getId()))) {
-                        return new ResponseEntity<ApiResponse>(new ApiResponse(false, "A manager can only edit guards"),
-                                HttpStatus.BAD_REQUEST);
-                    }
-                }*/
-         //   }
-            //
             // File Validations
             String fileType = file.getContentType();
             Long fileSize = file.getSize();

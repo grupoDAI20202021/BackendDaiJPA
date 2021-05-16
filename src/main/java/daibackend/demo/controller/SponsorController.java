@@ -9,6 +9,7 @@ import daibackend.demo.repository.TownHallRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -23,20 +24,13 @@ public class SponsorController {
     @Autowired
     TownHallRepository townHallRepository;
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION')")
     @GetMapping("/townhalls/{idTownHall}/sponsors")
     public List<SponsorList> listSponsor(/*@CurrentUser UserPrincipal currentUser*/@PathVariable long idTownHall) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return sponsorRepository.findAllByTownHall(idTownHall);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL')")
     @PostMapping("/townhalls/{idTownHall}/sponsors") // Creat Sponsor
     public ResponseEntity<ApiResponse> saveSponsor(@PathVariable long idTownHall, @RequestBody CreateSponsor createSponsor) {
         try {
@@ -60,7 +54,7 @@ public class SponsorController {
     }
 
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Deactivate
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL')") // Deactivate
     @PutMapping("sponsors/{idSponsor}")
     public ResponseEntity<ApiResponse> deleteLogic(@PathVariable (value="idSponsor")long idSponsor) {
         try {
@@ -69,26 +63,18 @@ public class SponsorController {
                         HttpStatus.BAD_REQUEST);
             }
 
-
            sponsorRepository.deleteLogic(0,idSponsor);
-
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Sponsor eliminated.", idSponsor),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
 
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL')")
     @DeleteMapping("sponsors/{idSponsor}")
     public ResponseEntity<ApiResponse> deleteSponsor(@PathVariable (value="idSponsor")long idSponsor) {
         Sponsor sponsor = sponsorRepository.findDistinctByIdSponsor(idSponsor);

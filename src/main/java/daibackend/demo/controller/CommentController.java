@@ -14,6 +14,7 @@ import daibackend.demo.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -32,21 +33,15 @@ public class CommentController {
     @Autowired
     ChildRepository childRepository;
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/posts/{idPost}/comments")
     public List<Comment> listComments(/*@CurrentUser UserPrincipal currentUser*/@PathVariable long idPost) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
 
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         Post post = postRepository.findDistinctByIdPost(idPost);
         return commentRepository.findAllByPost(post);
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @PostMapping("/posts/{idPost}/comments")
     public ResponseEntity<ApiResponse> saveComment(@PathVariable long idPost ,@RequestBody CreatePost comment) {
         try {
@@ -67,7 +62,7 @@ public class CommentController {
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Se calhar tirar
+    @PreAuthorize("hasROLE('CHILD')")
     @PutMapping("/comments/{idComment}")
     public ResponseEntity<ApiResponse> updateComment(@PathVariable(value="idComment")long idComment, @RequestBody updateEmail update) {
         try {
@@ -85,6 +80,7 @@ public class CommentController {
         return null;
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @DeleteMapping("/comments/{idComment}")
     public ResponseEntity<ApiResponse> deleteComment(@PathVariable (value="idComment")long idComment) {
         try {

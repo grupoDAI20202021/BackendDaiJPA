@@ -10,6 +10,7 @@ import daibackend.demo.repository.SugestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -25,48 +26,25 @@ public class SugestionController {
     @Autowired
     ChildRepository childRepository;
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @GetMapping("/sugestions")
     public List<Sugestion> listSugestions(/*@CurrentUser UserPrincipal currentUser*/) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return sugestionRepository.findAllByChecked(0);
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/sugestions/{idSugestion}")
     public Sugestion listSugestionsById(/*@CurrentUser UserPrincipal currentUser*/@PathVariable long idSugestion) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return sugestionRepository.findDistinctByIdSugestion(idSugestion);
     }
 
     @GetMapping("/sugestions/children/{idChild}")
     public List<Sugestion> listSugestionsByChild(/*@CurrentUser UserPrincipal currentUser*/@PathVariable long idChild) {
         Child child = childRepository.findDistinctByIdChild(idChild);
-        //User userLogged = userRepository.fndByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return sugestionRepository.findAllByChild(child);
     }
 
+    @PreAuthorize("hasROLE('CHILD')")
     @PostMapping("/sugestions") // Create sugestion
     public ResponseEntity<ApiResponse> saveSugestion(@RequestBody CreateSugestion createSugestion) {
         try {
@@ -94,7 +72,7 @@ public class SugestionController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')") // Child
     @PutMapping("/sugestions/{idSugestion}")
     public ResponseEntity<ApiResponse> updateSugestion(@PathVariable (value="idSugestion")long idSugestion) {
         try {
@@ -103,23 +81,14 @@ public class SugestionController {
                         HttpStatus.BAD_REQUEST);
             }
             sugestionRepository.updateSugestion(1,idSugestion);
-
-
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Sugestion updated.", idSugestion),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @DeleteMapping("sugestions/{idSugestion}")
     public ResponseEntity<ApiResponse> deleteSugestion(@PathVariable (value="idSugestion")long idSugestion) {
         Sugestion sugestion = sugestionRepository.findDistinctByIdSugestion(idSugestion);

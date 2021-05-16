@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,52 +48,28 @@ public class InscriptionController {
 
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR')or hasROLE('CHILD')")
     @GetMapping("/children/{idChild}/activities")
     public List<InscriptionActivitiesByChildList> listActivitiesByChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         Child child = childRepository.findDistinctByIdChild(idChild);
         return inscriptionRepository.findAllByActivityChild(idChild,1,1);
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @GetMapping("/children/{idChild}/currentactivities")
     public List<InscriptionActivitiesByChildList> listCurrentActivitiesByChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         Child child = childRepository.findDistinctByIdChild(idChild);
         return inscriptionRepository.findAllByCurrentActivityChild(idChild,"Aprovada",1);
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('INSTITUTION')")
     @GetMapping("/activities/{idActivity}/children")
     public List<InscriptionChildrenByActivityList> listChildrenByActivity(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idActivity) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
 
         return inscriptionRepository.findAllByChildActivity(idActivity,1);
     }
 
-
+    @PreAuthorize("hasROLE('CHILD')")
     @PostMapping("/activities/{idActivity}/children") // Creat inscription
     public ResponseEntity<ApiResponse> saveInscription(@CurrentUser UserPrincipal currentUser, @PathVariable long idActivity, @RequestBody CreateInscription inscription) {
         try {
@@ -133,7 +110,7 @@ public class InscriptionController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PreAuthorize("hasROLE('CHILD')")  // Child
     @PutMapping("/activities/{idActivity}/children/{idChild}")
     public ResponseEntity<ApiResponse> updateInscriptionEvaluation(@PathVariable (value="idChild")long idChild,@PathVariable (value="idActivity")long idActivity, @RequestBody updateInt update) {
         try {
@@ -150,21 +127,13 @@ public class InscriptionController {
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Evaluation updated.", idChild),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PreAuthorize("hasRole('ADMINISTRATOR')or hasROLE('CHILD')")  // Child
     @PutMapping("/activities/{idActivity}/children/{idChild}/active")
     public ResponseEntity<ApiResponse> updateInscriptionActive(@PathVariable (value="idChild")long idChild,@PathVariable (value="idActivity")long idActivity, @RequestBody updateInt update) {
         try {
@@ -182,21 +151,13 @@ public class InscriptionController {
                 return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Inscription not activated.", idChild),
                         HttpStatus.CREATED);
             }
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
-        //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('INSTITUTION') ")  // Child
         @PutMapping("/activities/{idActivity}/children/{idChild}/presence")
         public ResponseEntity<ApiResponse> updateInscriptionpresence(@PathVariable (value="idChild")long idChild,@PathVariable (value="idActivity")long idActivity, @RequestBody updateInt update) {
             try {
@@ -214,25 +175,15 @@ public class InscriptionController {
 
                 return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Presence updated.", idChild),
                         HttpStatus.CREATED);
-                //User userLogged = userRepository.findByUserId(currentUser.getId());
-                //Set<Role> roleUserLogged = userLogged.getRoles();
-
-                // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
             } catch (Exception e) {
                 return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                         HttpStatus.BAD_REQUEST);
             }
     }
-
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @DeleteMapping("/activities/{idActivity}/children/{idChild}")
     public ResponseEntity<ApiResponse> deleteInscription(@PathVariable (value="idChild")long idChild,@PathVariable (value="idActivity")long idActivity) {
         try {
-            Child child = childRepository.findDistinctByIdChild(idChild);
-            Activity activity = activityRepository.findByIdActivity(idActivity);
             inscriptionRepository.deleteInscriptionByActivityAndChild(idActivity,idChild);
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Inscription deleted.", idChild),
@@ -243,17 +194,9 @@ public class InscriptionController {
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @GetMapping("/ranks")
     public List<RankList> listRanks(/*@CurrentUser UserPrincipal currentUser*/) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
 
         return inscriptionRepository.findRankByPoints(1);
     }

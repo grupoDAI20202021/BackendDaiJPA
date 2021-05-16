@@ -40,7 +40,7 @@ public class AuthController {
         return authService.authenticateUser(loginRequest, response);
     }*/
 
-   // @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/logout")
     public ResponseEntity<ApiResponse> logoutUser(HttpServletRequest request, HttpServletResponse response) {
         return authService.logoutUser(request, response);

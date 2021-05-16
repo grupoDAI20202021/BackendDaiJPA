@@ -49,25 +49,18 @@ import java.util.logging.Logger;
             return activityRepository.findAllActivities(1);
         }
 
-    //@PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/activities/{idActivity}")
     public Activity findActivity(@CurrentUser UserPrincipal currentUser,@PathVariable long idActivity) {
         return activityRepository.findByIdActivity(idActivity);
     }
 
 
-        //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+        @PreAuthorize("hasRole('INSTITUTION')")
         @GetMapping("/activities/{idInstitution}/status")
         public List<ActivitiesList> listActivitiesTownHallPorAvaliar(@CurrentUser UserPrincipal currentUser, @PathVariable(value = "idInstitution") long idInstitution) {
 
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/ if(currentUser.getId().equals(idInstitution)) {
+             if(currentUser.getId().equals(idInstitution)) {
                 return activityRepository.findActivitiesByStatus("Por avaliar", idInstitution, 1);
             }
             return null;
@@ -137,7 +130,7 @@ import java.util.logging.Logger;
             }
         }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // TownHall
+    @PreAuthorize("hasRole('TOWNHALL')")  // TownHall
     @PutMapping("/activities/{idActivity}/sponsor")
     public ResponseEntity<ApiResponse> updateActivitySponsor(@PathVariable (value="idActivity")long idActivity, @RequestBody updateActivityTownHall update) {
         try {
@@ -153,21 +146,14 @@ import java.util.logging.Logger;
            activityRepository.updateActivityAsTownHall(idSponsor,status, idActivity);
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Activity updated.", idActivity),
                     HttpStatus.CREATED);
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
 
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  Institution
+    @PreAuthorize("hasRole('INSTITUTION')")  //Institution
     @PutMapping("/activities/{idActivity}")
     public ResponseEntity<ApiResponse> updateActivity(@PathVariable (value="idActivity")long idActivity, @RequestBody updateActivityInstitution update) {
         try {
@@ -185,21 +171,14 @@ import java.util.logging.Logger;
             activityRepository.updateActivityAsInstituition(address,init_data,end_data,spaces,title,idActivity);
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Activity updated.", idActivity),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
 
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  Institution
+    @PreAuthorize("hasRole('INSTITUTION') ") // Institution
     @PutMapping("/activities/{idActivity}/evaluation")
     public ResponseEntity<ApiResponse> updateActivityEvaluation(@PathVariable (value="idActivity")long idActivity, @RequestBody updateActivityEvaluation update) {
         try {
@@ -211,14 +190,7 @@ import java.util.logging.Logger;
             activityRepository.updateActivityEvaluation(evaluation,"Finalizada",idActivity);
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Activity updated.", idActivity),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
 
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
@@ -238,7 +210,7 @@ import java.util.logging.Logger;
         }
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/activitiesyear")
     public ActivitiesInYear listActivitiesYear(/*@CurrentUser UserPrincipal currentUser*/) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -287,28 +259,12 @@ import java.util.logging.Logger;
             e.printStackTrace();
         }
 
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
       return null;
     }
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")
+    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/lastactivities")
     public List<ActivityList> listActivitiesLast(/*@CurrentUser UserPrincipal currentUser*/) {
-        //User userLogged = userRepository.findByUserId(currentUser.getId());
-        //Set<Role> roleUserLogged = userLogged.getRoles();
-
-        // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         return activityRepository.findLast8( 1,PageRequest.of(0,8));
     }
     }

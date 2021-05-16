@@ -20,7 +20,7 @@ public class LoginController {
     LoginRepository loginRepository;
 
 
-    //@PreAuthorize("hasRole('GUARD') or hasRole('MANAGER') or hasRole('NETWORKMAN')")  // Child
+
     @PutMapping("/login/activate")
     public ResponseEntity<ApiResponse> updateChildActivate(@RequestBody updateLoginActive update) {
         try {
@@ -37,14 +37,6 @@ public class LoginController {
 
             return new ResponseEntity<ApiResponse>(new ApiResponse(true, "Email updated.", loginRepository.findDistinctByEmailAndActive(email,1).getIdLogin()),
                     HttpStatus.CREATED);
-            //User userLogged = userRepository.findByUserId(currentUser.getId());
-            //Set<Role> roleUserLogged = userLogged.getRoles();
-
-            // Get Permissions
-        /*if (String.valueOf(roleUserLogged).equals("[Role [id=0]]")
-                || String.valueOf(roleUserLogged).equals("[Role [id=1]]")) {
-            return alertLogRepository.findAlertLogsByPrison(userLogged.getPrison());
-        }*/
         } catch (Exception e) {
             return new ResponseEntity<ApiResponse>(new ApiResponse(false, "Invalid data format"),
                     HttpStatus.BAD_REQUEST);
