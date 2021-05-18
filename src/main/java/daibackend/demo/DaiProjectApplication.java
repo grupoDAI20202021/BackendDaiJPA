@@ -33,7 +33,7 @@ public class DaiProjectApplication implements ServletContextListener {
             Properties p = new Properties();
             p.load(getClass().getResourceAsStream("/application.properties"));
           //  Ssh forwarding is used if the configuration file contains the ssh.forward.enabled attribute
-            if(p.getProperty("ssh.forward.enabled")!=null){
+            if(p.getProperty("ssh.forward.enablede")!=null){
                 log.info("ssh forward is opened.");
                 log.info("ssh init ……");
                 Session session = new JSch().getSession(p.getProperty("ssh.forward.username"),p.getProperty("ssh.forward.host"),Integer.valueOf(p.getProperty("ssh.forward.port")));
