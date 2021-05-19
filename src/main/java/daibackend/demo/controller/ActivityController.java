@@ -49,7 +49,7 @@ import java.util.logging.Logger;
             return activityRepository.findAllActivities(1);
         }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/activities/{idActivity}")
     public Activity findActivity(@CurrentUser UserPrincipal currentUser,@PathVariable long idActivity) {
         return activityRepository.findByIdActivity(idActivity);
@@ -88,7 +88,7 @@ import java.util.logging.Logger;
         return null;
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/activities/current/{idActivityType}")
     public int listCurrentActivitiesTotal(@CurrentUser UserPrincipal currentUser,@PathVariable long idActivityType) {
         return activityRepository.findActivitiesByStatusNumber("Aprovada", idActivityType,1);

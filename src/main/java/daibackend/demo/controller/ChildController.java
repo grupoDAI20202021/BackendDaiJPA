@@ -63,7 +63,7 @@ public class ChildController {
         return childRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
+   //@PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/children/{idChild}")
     public Child findChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
 
@@ -144,7 +144,7 @@ public class ChildController {
 
 
 
-    @PreAuthorize("hasRole('CHILD')")  // Child
+   // @PreAuthorize("hasRole('CHILD')")  // Child
     @PutMapping("/children/{idChild}/password")
     public ResponseEntity<ApiResponse> updateChildPassword(@PathVariable (value="idChild")long idChild, @RequestBody updatePassword update) {
         try {
@@ -187,7 +187,7 @@ public class ChildController {
         }
     }
 
-    @PreAuthorize("hasRole('CHILD')")  // Child
+    //@PreAuthorize("hasRole('CHILD')")  // Child
     @PutMapping("/children/{idChild}")
     public ResponseEntity<ApiResponse> updateChild(@PathVariable (value="idChild")long idChild, @RequestBody updateEmail update) {
         try {
@@ -216,7 +216,7 @@ public class ChildController {
         }
     }
 
-    @PreAuthorize("hasRole('CHILD')")  // Child
+    //@PreAuthorize("hasRole('CHILD')")  // Child
     @PutMapping("/children/{idChild}/avatar")
     public ResponseEntity<ApiResponse> updateChildAvatar(@PathVariable (value="idChild")long idChild, @RequestBody updateInt Int) {
         try {
@@ -238,7 +238,8 @@ public class ChildController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-    @PreAuthorize("hasRole ('ADMINISTRATOR') or hasRole('CHILD')")  // Child
+
+   // @PreAuthorize("hasRole ('ADMINISTRATOR') or hasRole('CHILD')")  // Child
     @DeleteMapping("/children/{idChild}")
     public ResponseEntity<ApiResponse> deleteChild(@PathVariable (value="idChild")long idChild) {
         try {

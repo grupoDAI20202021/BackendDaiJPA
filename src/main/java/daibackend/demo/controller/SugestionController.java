@@ -44,7 +44,7 @@ public class SugestionController {
         return sugestionRepository.findAllByChild(child);
     }
 
-    @PreAuthorize("hasROLE('CHILD')")
+   //@PreAuthorize("hasROLE('CHILD')")
     @PostMapping("/sugestions") // Create sugestion
     public ResponseEntity<ApiResponse> saveSugestion(@RequestBody CreateSugestion createSugestion) {
         try {
@@ -72,7 +72,7 @@ public class SugestionController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')") // Child
+   //@PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')") // Child
     @PutMapping("/sugestions/{idSugestion}")
     public ResponseEntity<ApiResponse> updateSugestion(@PathVariable (value="idSugestion")long idSugestion) {
         try {

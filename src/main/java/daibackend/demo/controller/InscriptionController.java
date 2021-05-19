@@ -60,14 +60,13 @@ public class InscriptionController {
 
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR')or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR')or hasROLE('CHILD')")
     @GetMapping("/children/{idChild}/activities")
     public List<InscriptionActivitiesByChildList> listActivitiesByChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
         Child child = childRepository.findDistinctByIdChild(idChild);
         return inscriptionRepository.findAllByActivityChild(idChild,1,1);
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @GetMapping("/children/{idChild}/currentactivities")
     public List<InscriptionActivitiesByChildList> listCurrentActivitiesByChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
         Child child = childRepository.findDistinctByIdChild(idChild);
@@ -124,7 +123,7 @@ public class InscriptionController {
                     HttpStatus.BAD_REQUEST);
         }
     }
-    @PreAuthorize("hasROLE('CHILD')")  // Child
+    //@PreAuthorize("hasROLE('CHILD')")  // Child
     @PutMapping("/activities/{idActivity}/children/{idChild}")
     public ResponseEntity<ApiResponse> updateInscriptionEvaluation(@PathVariable (value="idChild")long idChild,@PathVariable (value="idActivity")long idActivity, @RequestBody updateInt update) {
         try {
@@ -147,7 +146,7 @@ public class InscriptionController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR')or hasROLE('CHILD')")  // Child
+   // @PreAuthorize("hasRole('ADMINISTRATOR')or hasROLE('CHILD')")  // Child
     @GetMapping("/activities/{idActivity}/children/{idChild}/active")
     public ResponseEntity<ApiResponse> updateInscriptionActive(@PathVariable (value="idChild")long idChild,@PathVariable (value="idActivity")long idActivity, @RequestParam int activate) {
         try {
@@ -194,7 +193,7 @@ public class InscriptionController {
                         HttpStatus.BAD_REQUEST);
             }
     }
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
+   // @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @DeleteMapping("/activities/{idActivity}/children/{idChild}")
     public ResponseEntity<ApiResponse> deleteInscription(@PathVariable (value="idChild")long idChild,@PathVariable (value="idActivity")long idActivity) {
         try {

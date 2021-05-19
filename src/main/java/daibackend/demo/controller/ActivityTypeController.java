@@ -43,7 +43,7 @@ public class ActivityTypeController {
         return dataActivityTypeDashboard;
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/activitiestype")
     public List<ActivityType> findActivityType(/*@CurrentUser UserPrincipal currentUser*/) {
 

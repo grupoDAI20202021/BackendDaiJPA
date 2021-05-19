@@ -43,7 +43,7 @@ public class PostController {
         return postRepository.findDistinctByIdPost(idPost);
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @PostMapping("/posts")
     public ResponseEntity<ApiResponse> savePost(@RequestBody CreatePost post) {
         try {
@@ -65,7 +65,7 @@ public class PostController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @PutMapping("/posts/{idPost}")
     public ResponseEntity<ApiResponse> updatePost(@PathVariable(value="idPost")long idPost, @RequestBody updateEmail update) {
         try {
@@ -82,7 +82,7 @@ public class PostController {
         return null;
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @DeleteMapping("/posts/{idPost}")
     public ResponseEntity<ApiResponse> deletePost(@PathVariable (value="idPost")long idPost) {
         try {

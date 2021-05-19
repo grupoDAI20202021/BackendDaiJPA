@@ -30,7 +30,7 @@ public class PreferenceController {
     @Autowired
     ActivityTypeRepository activityTypeRepository;
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @GetMapping("/preferences/{idChild}")
     public List<Preference> listActivitiesTypeByChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
 
@@ -38,7 +38,7 @@ public class PreferenceController {
         return preferenceRepository.findAllByChild(child);
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR')  or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR')  or hasROLE('CHILD')")
     @GetMapping("/preferences/{idChild}/activities")
     public List<PreferenceActivitiesByChild> listPreferenceActivitiesByChild(/*@CurrentUser UserPrincipal currentUser*/ @PathVariable long idChild) {
         Child child = childRepository.findDistinctByIdChild(idChild);
@@ -65,7 +65,7 @@ public class PreferenceController {
     }*/
    // }
 
-    @PostMapping("/preferences/{idChild}/{idActivityType}") // Creat preference
+   // @PostMapping("/preferences/{idChild}/{idActivityType}") // Creat preference
     public ResponseEntity<ApiResponse> savePreference(@PathVariable long idChild, @PathVariable long idActivityType) {
         try {
             Child child = childRepository.findDistinctByIdChild(idChild);
@@ -91,7 +91,7 @@ public class PreferenceController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
+   // @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @DeleteMapping("/preferences/{idChild}/{idActivityType}")
     public ResponseEntity<ApiResponse> deletePreference(@PathVariable (value="idChild")long idChild, @PathVariable (value="idActivityType")long idActivityType) {
         Child child = childRepository.findDistinctByIdChild(idChild);

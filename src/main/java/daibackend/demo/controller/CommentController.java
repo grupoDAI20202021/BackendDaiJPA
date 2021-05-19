@@ -33,7 +33,7 @@ public class CommentController {
     @Autowired
     ChildRepository childRepository;
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/posts/{idPost}/comments")
     public List<Comment> listComments(/*@CurrentUser UserPrincipal currentUser*/@PathVariable long idPost) {
 
@@ -41,7 +41,7 @@ public class CommentController {
         return commentRepository.findAllByPost(post);
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
+   // @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @PostMapping("/posts/{idPost}/comments")
     public ResponseEntity<ApiResponse> saveComment(@PathVariable long idPost ,@RequestBody CreatePost comment) {
         try {
@@ -62,7 +62,7 @@ public class CommentController {
         }
     }
 
-    @PreAuthorize("hasROLE('CHILD')")
+   // @PreAuthorize("hasROLE('CHILD')")
     @PutMapping("/comments/{idComment}")
     public ResponseEntity<ApiResponse> updateComment(@PathVariable(value="idComment")long idComment, @RequestBody updateEmail update) {
         try {
@@ -80,7 +80,7 @@ public class CommentController {
         return null;
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
+   // @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @DeleteMapping("/comments/{idComment}")
     public ResponseEntity<ApiResponse> deleteComment(@PathVariable (value="idComment")long idComment) {
         try {
