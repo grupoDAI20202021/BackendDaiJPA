@@ -31,13 +31,13 @@ public class PostController {
     @Autowired
     ChildRepository childRepository;
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
+   // @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/posts")
     public List<Post> listPosts(/*@CurrentUser UserPrincipal currentUser*/) {
         return postRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
+   // @PreAuthorize("hasRole('ADMINISTRATOR') or hasRole('TOWNHALL') or hasRole('INSTITUTION') or hasROLE('CHILD')")
     @GetMapping("/posts/{idPost}")
     public Post listPost(@PathVariable long idPost/*@CurrentUser UserPrincipal currentUser*/) {
         return postRepository.findDistinctByIdPost(idPost);

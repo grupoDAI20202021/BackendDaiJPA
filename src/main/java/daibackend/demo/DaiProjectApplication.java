@@ -24,7 +24,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @EntityScan(basePackageClasses = { DaiProjectApplication.class, Jsr310JpaConverters.class })
 public class DaiProjectApplication implements ServletContextListener {
 
-    protected final Logger log = Logger.getLogger(String.valueOf(this.getClass()));
+   /* protected final Logger log = Logger.getLogger(String.valueOf(this.getClass()));
 
 
 
@@ -33,7 +33,7 @@ public class DaiProjectApplication implements ServletContextListener {
             Properties p = new Properties();
             p.load(getClass().getResourceAsStream("/application.properties"));
           //  Ssh forwarding is used if the configuration file contains the ssh.forward.enabled attribute
-            if(p.getProperty("ssh.forward.enablede")!=null){
+            if(p.getProperty("ssh.forward.enabled")!=null){
                 log.info("ssh forward is opened.");
                 log.info("ssh init ……");
                 Session session = new JSch().getSession(p.getProperty("ssh.forward.username"),p.getProperty("ssh.forward.host"),Integer.valueOf(p.getProperty("ssh.forward.port")));
@@ -51,7 +51,7 @@ public class DaiProjectApplication implements ServletContextListener {
         } catch (Exception e) {
             log.info("ssh settings is failed. skip!");
         }
-    }
+    }*/
     @PostConstruct
     void init() {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Lisbon"));
