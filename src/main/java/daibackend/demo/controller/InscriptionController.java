@@ -207,7 +207,7 @@ public class InscriptionController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
+    //@PreAuthorize("hasRole('ADMINISTRATOR') or hasROLE('CHILD')")
     @GetMapping("/ranks")
     public List<RankList> listRanks(/*@CurrentUser UserPrincipal currentUser*/) {
 
