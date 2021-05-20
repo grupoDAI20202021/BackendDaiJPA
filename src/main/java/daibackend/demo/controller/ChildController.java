@@ -128,7 +128,7 @@ public class ChildController {
                     childRepository.save(newChild);
                     //String message = "Caro encarregado,"+System.lineSeparator()+ System.lineSeparator()+"O código de ativação do seu educando é: "+ String.valueOf(l.getGeneratedCode()) + System.lineSeparator() +System.lineSeparator()+"Com os melhores cumprimentos,"+System.lineSeparator()+"ProChildColab";
                     String message="";
-                    message+="<p>Caro encarregado,</p><br><p>Para ativar a conta do seu educando carregue no seguinte link:</p><br> \"<a href='http://127.0.0.1:8080/api/login/activate?updateEmail=\"+email+\"&updateGeneratedCode=\"+number+\"'>Clique Aqui!<a/>\"  <br><p>Com os melhores cumprimentos,<br>ProChildColab</p><br>";
+                    message+="<p>Caro encarregado,</p><br><p>Para ativar a conta do seu educando carregue no seguinte link:</p><br> \"<a href='http://127.0.0.1:8080/api/login/activate?updateEmail="+email+"&updateGeneratedCode="+number+"'>Clique Aqui!<a/>\"  <br><p>Com os melhores cumprimentos,<br>ProChildColab</p><br>";
 
                     sendSimpleMessage(newChild.getParentEmail(),"City4kids- Código de ativação de conta do seu educando", message);
 
