@@ -94,7 +94,7 @@ import java.util.logging.Logger;
         return activityRepository.findActivitiesByStatusNumber("Aprovada", idActivityType,1);
     }
 
-    @PreAuthorize("hasRole('INSTITUTION')")
+        @PreAuthorize("hasRole('INSTITUTION')")
         @PostMapping("/activities")
         public ResponseEntity<ApiResponse> saveActivity(@CurrentUser UserPrincipal currentUser,@RequestBody CreateActivity activity) {
             try {
